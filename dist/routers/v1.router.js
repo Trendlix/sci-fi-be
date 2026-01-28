@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const admin_routes_1 = __importDefault(require("../modules/routes/admin/admin.routes"));
+const home_routes_1 = __importDefault(require("../modules/routes/home/home.routes"));
+const contact_routes_1 = __importDefault(require("../modules/routes/contact/contact.routes"));
+const about_routes_1 = __importDefault(require("../modules/routes/about/about.routes"));
+const studio_routes_1 = __importDefault(require("../modules/routes/studio/studio.routes"));
+const land_routes_1 = __importDefault(require("../modules/routes/land/land.routes"));
+const v1Router = (0, express_1.Router)();
+v1Router.use("/admin", admin_routes_1.default);
+v1Router.use("/home", home_routes_1.default);
+v1Router.use("/contact", contact_routes_1.default);
+v1Router.use("/about", about_routes_1.default);
+v1Router.use("/studio", studio_routes_1.default);
+v1Router.use("/land", land_routes_1.default);
+exports.default = v1Router;

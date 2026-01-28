@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const contact_controllers_1 = require("../../controllers/contact/contact.controllers");
+const admin_auth_middleware_1 = require("../../../shared/middlewares/admin-auth.middleware");
+const language_middleware_1 = require("../../../shared/middlewares/language.middleware");
+const zod_util_1 = require("../../../shared/utils/zod.util");
+const contact_validation_schemas_1 = require("../../../shared/validation/contact/contact.validation.schemas");
+const contactRoutes = (0, express_1.Router)();
+contactRoutes.use(language_middleware_1.languageMiddleware);
+contactRoutes.get("/", contact_controllers_1.getContactController);
+contactRoutes.patch("/", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(contact_validation_schemas_1.contactValidationSchema), contact_controllers_1.patchContactController);
+exports.default = contactRoutes;

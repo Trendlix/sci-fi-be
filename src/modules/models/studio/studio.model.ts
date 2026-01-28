@@ -1,0 +1,122 @@
+import mongoose, { Document } from "mongoose";
+import { IStudio } from "./types/model.types";
+
+const HeroSchema = new mongoose.Schema({
+    title: {
+        type: mongoose.Schema.Types.Array,
+        required: true,
+        validate: {
+            validator: (v: string[]) => v.length === 6,
+            message: "Title must have exactly 6 words."
+        }
+    },
+    description: {
+        type: String,
+        required: true,
+        minlength: 10
+    }
+}, { _id: false, timestamps: true });
+
+
+const AboutCardSchema = new mongoose.Schema({
+    tag: {
+        type: String,
+        required: true,
+    },
+    file: {
+        url: {
+            type: String,
+            required: false
+        },
+        path: {
+            type: String,
+            required: false
+        },
+        contentType: String,
+        uploadedAt: {
+            type: Date,
+            default: Date.now
+        }
+    },
+    icon: {
+        type: String,
+        required: true,
+    },
+    title: {
+        type: String,
+        required: true,
+        minlength: 3,
+        maxlength: 20
+    },
+    description: {
+        type: String,
+        required: true,
+    }
+}, { _id: false, timestamps: true });
+
+const AboutSchema = new mongoose.Schema({
+    description: {
+        type: String,
+        required: true,
+        minlength: 10
+    },
+    cards: [AboutCardSchema]
+}, { _id: false, timestamps: true });
+
+const PartnersSchema = new mongoose.Schema({
+    description: {
+        type: String,
+        required: true,
+        minlength: 10
+    },
+    files: [{
+        url: {
+            type: String,
+            required: false
+        },
+        path: {
+            type: String,
+            required: false
+        },
+        contentType: String,
+        uploadedAt: {
+            type: Date,
+            default: Date.now
+        }
+    }]
+}, { _id: false, timestamps: true })
+
+const WhyUsSchema = new mongoose.Schema({
+    description: {
+        type: String,
+        required: true,
+        minlength: 10
+    },
+    lines: [{
+        icon: {
+            type: String,
+            required: true,
+        },
+        line: {
+            type: String,
+            required: true,
+            minlength: 3,
+            maxlength: 200
+        }
+    }]
+}, { _id: false, timestamps: true })
+
+const StudioBaseSchema = new mongoose.Schema({
+    hero: HeroSchema,
+    about: AboutSchema,
+    partners: PartnersSchema,
+    whyUs: WhyUsSchema
+}, { _id: false, timestamps: true })
+
+const StudioSchema = new mongoose.Schema({
+    ar: StudioBaseSchema,
+    en: StudioBaseSchema
+}, { timestamps: true })
+
+export type IStudioModel = IStudio & Document;
+export const StudioModel = mongoose.model<IStudioModel>('Studio', StudioSchema);
