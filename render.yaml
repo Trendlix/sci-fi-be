@@ -11,4 +11,10 @@ services:
         sync: false
       - key: MONGO_DB_NAME
         value: sci-fi
+      - key: JWT_SECRET_KEY
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 1d
+      - key: BCRYPT_SALT_ROUNDS
+        value: "10"
 
