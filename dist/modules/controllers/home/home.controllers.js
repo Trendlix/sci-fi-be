@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateHomeLocationsController = exports.updateHomeTestimonialsController = exports.updateHomeHorizontalController = exports.updateHomeAboutController = exports.updateHomeHeroController = exports.getHomeLocationsController = exports.getHomeTestimonialsController = exports.getHomeHorizontalController = exports.getAboutController = exports.getHeroController = void 0;
+exports.getHomeAllController = exports.updateHomeLocationsController = exports.updateHomeTestimonialsController = exports.updateHomeHorizontalController = exports.updateHomeAboutController = exports.updateHomeHeroController = exports.getHomeLocationsController = exports.getHomeTestimonialsController = exports.getHomeHorizontalController = exports.getAboutController = exports.getHeroController = void 0;
 const error_services_1 = __importDefault(require("../../../services/error.services"));
 const home_services_1 = __importDefault(require("../../services/home/home.services"));
 exports.getHeroController = (0, error_services_1.default)(async (req, res) => {
@@ -44,5 +44,9 @@ exports.updateHomeTestimonialsController = (0, error_services_1.default)(async (
 });
 exports.updateHomeLocationsController = (0, error_services_1.default)(async (req, res) => {
     const response = await home_services_1.default.updateHomeLocations(req.lang ?? "en", req.body);
+    res.status(response.status).json(response);
+});
+exports.getHomeAllController = (0, error_services_1.default)(async (req, res) => {
+    const response = await home_services_1.default.getHomeAll(req.lang ?? "en");
     res.status(response.status).json(response);
 });

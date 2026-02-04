@@ -8,6 +8,7 @@ export type ILandFile = {
 export interface ILandHero {
     title: string[];
     description: string;
+    file?: ILandFile;
 }
 
 export interface IDiscoverCard {

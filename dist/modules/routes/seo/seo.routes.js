@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const seo_controllers_1 = require("../../controllers/seo/seo.controllers");
+const admin_auth_middleware_1 = require("../../../shared/middlewares/admin-auth.middleware");
+const language_middleware_1 = require("../../../shared/middlewares/language.middleware");
+const zod_util_1 = require("../../../shared/utils/zod.util");
+const seo_validation_schemas_1 = require("../../../shared/validation/seo/seo.validation.schemas");
+const seoRoutes = (0, express_1.Router)();
+seoRoutes.use(language_middleware_1.languageMiddleware);
+seoRoutes.get("/", seo_controllers_1.getSeoController);
+seoRoutes.patch("/", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(seo_validation_schemas_1.seoValidationSchema), seo_controllers_1.patchSeoController);
+exports.default = seoRoutes;

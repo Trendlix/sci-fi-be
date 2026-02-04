@@ -33,9 +33,9 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.aboutValidationSchema = void 0;
+exports.aboutValidationSchema = exports.valueSchema = exports.preValueSchema = exports.serviceSchema = exports.aboutMinSchema = exports.heroSchema = void 0;
 const z = __importStar(require("zod"));
-const heroSchema = z.object({
+exports.heroSchema = z.object({
     title: z.array(z.string().min(1)).length(6),
     description: z.string().min(10),
 });
@@ -49,23 +49,23 @@ const aboutCardSchema = z.object({
     title: z.string().min(1),
     description: z.string().min(1),
 });
-const aboutMinSchema = z.object({
+exports.aboutMinSchema = z.object({
     description: z.string().min(10),
     cards: z.array(aboutCardSchema).min(1).max(2),
 });
 const serviceCardSchema = z.object({
-    tag: z.string().min(3).max(20),
+    tag: z.string().min(3).max(500),
     icon: z.string().min(1),
-    title: z.string().min(3).max(20),
-    description: z.string().min(10).max(100),
+    title: z.string().min(3).max(500),
+    description: z.string().min(10).max(500),
 });
-const serviceSchema = z.object({
-    description: z.string().min(10).max(100),
+exports.serviceSchema = z.object({
+    description: z.string().min(10).max(500),
     cards: z.array(serviceCardSchema).min(1),
 });
-const preValueSchema = z.object({
+exports.preValueSchema = z.object({
     title: z.array(z.string().min(1)).length(5),
-    description: z.string().min(10).max(100),
+    description: z.string().min(10).max(500),
     file: z
         .object({
         url: z.string().optional(),
@@ -77,20 +77,20 @@ const preValueSchema = z.object({
 });
 const valueCardSchema = z.object({
     icon: z.string().min(1),
-    title: z.string().min(3).max(20),
-    description: z.string().min(10).max(100),
+    title: z.string().min(3).max(500),
+    description: z.string().min(10).max(500),
 });
-const valueSchema = z.object({
-    description: z.string().min(10).max(100),
+exports.valueSchema = z.object({
+    description: z.string().min(10).max(500),
     cards: z.array(valueCardSchema).min(1),
 });
 exports.aboutValidationSchema = z
     .object({
-    hero: heroSchema.optional(),
-    about: aboutMinSchema.optional(),
-    service: serviceSchema.optional(),
-    preValue: preValueSchema.optional(),
-    value: valueSchema.optional(),
+    hero: exports.heroSchema.optional(),
+    about: exports.aboutMinSchema.optional(),
+    service: exports.serviceSchema.optional(),
+    preValue: exports.preValueSchema.optional(),
+    value: exports.valueSchema.optional(),
 })
     .refine((payload) => Object.values(payload).some(Boolean), {
     message: "At least one section must be provided.",

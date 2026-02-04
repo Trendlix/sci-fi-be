@@ -1,7 +1,10 @@
 import { Router } from "express";
-import { getHeroController, getAboutController, getHomeHorizontalController, getHomeTestimonialsController, getHomeLocationsController, updateHomeHeroController, updateHomeTestimonialsController, updateHomeLocationsController, updateHomeHorizontalController, updateHomeAboutController } from "../../controllers/home/home.controllers";
+import { getHeroController, getAboutController, getHomeHorizontalController, getHomeTestimonialsController, getHomeLocationsController, updateHomeHeroController, updateHomeTestimonialsController, updateHomeLocationsController, updateHomeHorizontalController, updateHomeAboutController, getHomeAllController } from "../../controllers/home/home.controllers";
 import { languageMiddleware } from "../../../shared/middlewares/language.middleware";
 import { adminAuth } from "../../../shared/middlewares/admin-auth.middleware";
+import { zodValidator } from "../../../shared/utils/zod.util";
+import { homeAboutSchema, homeHeroSchema, homeHorizontalSchema, homeLocationsSchema, homeTestimonialsSchema } from "../../../shared/validation/home/home.validation.schemas";
+import { CachingMiddleware } from "../../middlewares/features.middlewares";
 
 const homeRoutes = Router();
 
@@ -13,10 +16,12 @@ homeRoutes.get("/horizontal", getHomeHorizontalController);
 homeRoutes.get("/testimonials", getHomeTestimonialsController);
 homeRoutes.get("/locations", getHomeLocationsController);
 
-homeRoutes.patch("/hero", adminAuth, updateHomeHeroController);
-homeRoutes.patch("/about", adminAuth, updateHomeAboutController);
-homeRoutes.patch("/horizontal", adminAuth, updateHomeHorizontalController);
-homeRoutes.patch("/testimonials", adminAuth, updateHomeTestimonialsController);
-homeRoutes.patch("/locations", adminAuth, updateHomeLocationsController);
+homeRoutes.get("/all", CachingMiddleware, languageMiddleware, getHomeAllController);
+
+homeRoutes.patch("/hero", adminAuth, zodValidator(homeHeroSchema), updateHomeHeroController);
+homeRoutes.patch("/about", adminAuth, zodValidator(homeAboutSchema), updateHomeAboutController);
+homeRoutes.patch("/horizontal", adminAuth, zodValidator(homeHorizontalSchema), updateHomeHorizontalController);
+homeRoutes.patch("/testimonials", adminAuth, zodValidator(homeTestimonialsSchema), updateHomeTestimonialsController);
+homeRoutes.patch("/locations", adminAuth, zodValidator(homeLocationsSchema), updateHomeLocationsController);
 
 export default homeRoutes;

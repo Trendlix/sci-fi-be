@@ -65,7 +65,7 @@ const ServiceCardSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 20
+        maxlength: 500
     },
     icon: {
         type: String,
@@ -75,13 +75,13 @@ const ServiceCardSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 20
+        maxlength: 500
     },
     description: {
         type: String,
         required: true,
         minlength: 10,
-        maxlength: 100
+        maxlength: 500
     }
 }, { _id: false, timestamps: true });
 const ServiceSchema = new mongoose_1.default.Schema({
@@ -89,7 +89,7 @@ const ServiceSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 10,
-        maxlength: 100
+        maxlength: 500
     },
     cards: {
         type: [ServiceCardSchema],
@@ -113,7 +113,7 @@ const PreValueSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 10,
-        maxlength: 100
+        maxlength: 500
     },
     file: {
         url: {
@@ -143,13 +143,13 @@ const ValueCardSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 20
+        maxlength: 500
     },
     description: {
         type: String,
         required: true,
         minlength: 10,
-        maxlength: 100
+        maxlength: 500
     }
 }, { _id: false, timestamps: true });
 const ValueSchema = new mongoose_1.default.Schema({
@@ -157,7 +157,7 @@ const ValueSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 10,
-        maxlength: 100
+        maxlength: 500
     },
     cards: {
         type: [ValueCardSchema],

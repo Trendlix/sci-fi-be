@@ -10,6 +10,7 @@ const fileSchema = z.object({
 export const landHeroSchema = z.object({
     title: z.array(z.string().min(1)).length(6),
     description: z.string().min(10),
+    file: fileSchema.optional(),
 });
 
 const discoverCardSchema = z.object({

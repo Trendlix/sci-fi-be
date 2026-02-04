@@ -24,7 +24,7 @@ export interface IStudioAbout {
 }
 
 export interface IStudioPartners {
-    description: string;
+    description?: string;
     files: IStudioFile[];
 }
 

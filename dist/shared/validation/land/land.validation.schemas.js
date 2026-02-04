@@ -44,6 +44,7 @@ const fileSchema = z.object({
 exports.landHeroSchema = z.object({
     title: z.array(z.string().min(1)).length(6),
     description: z.string().min(10),
+    file: fileSchema.optional(),
 });
 const discoverCardSchema = z.object({
     title: z.string().min(3).max(20),

@@ -14,6 +14,21 @@ const HeroSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 10
+    },
+    file: {
+        url: {
+            type: String,
+            required: false
+        },
+        path: {
+            type: String,
+            required: false
+        },
+        contentType: String,
+        uploadedAt: {
+            type: Date,
+            default: Date.now
+        }
     }
 }, { _id: false, timestamps: true });
 

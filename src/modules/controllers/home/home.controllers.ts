@@ -51,3 +51,8 @@ export const updateHomeLocationsController = CatchAsyncError(async (req: Request
     const response = await homeServices.updateHomeLocations(req.lang ?? "en", req.body);
     res.status(response.status).json(response);
 })  
+
+export const getHomeAllController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await homeServices.getHomeAll(req.lang ?? "en");
+    res.status(response.status).json(response);
+})

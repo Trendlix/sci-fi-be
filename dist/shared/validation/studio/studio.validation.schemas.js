@@ -56,8 +56,9 @@ exports.studioAboutSchema = z.object({
     description: z.string().min(10),
     cards: z.array(aboutCardSchema).min(1),
 });
+const optionalPartnersDescription = z.union([z.string().min(10), z.literal("")]).optional();
 exports.studioPartnersSchema = z.object({
-    description: z.string().min(10),
+    description: optionalPartnersDescription,
     files: z.array(fileSchema).min(1),
 });
 const whyUsLineSchema = z.object({

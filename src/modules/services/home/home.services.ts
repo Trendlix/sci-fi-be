@@ -1,8 +1,10 @@
 import { Model } from "mongoose";
 import { HomeModel, IHomeModel } from "../../models/home/home.model";
+import { SeoModel, ISeoModel } from "../../models/seo/seo.model";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
 import { IAbout, IHero, IHorizontal, ILocation, ITestimonial, IHome, IHomeBase } from "../../models/home/types/model.types";
+import { ISeo } from "../../models/seo/types/model.types";
 
 class HomeServices {
     constructor(private readonly homeModel: Model<IHomeModel>) {
@@ -162,6 +164,33 @@ class HomeServices {
             throw new ServerError("Home locations not found", 404);
         }
         return responseFormatter(200, "Home locations updated successfully", updatedLocations);
+    }
+
+    async getHomeAll(lang: "ar" | "en") {
+        const projection = {
+            [`${lang}.hero`]: 1,
+            [`${lang}.about`]: 1,
+            [`${lang}.horizontal`]: 1,
+            [`${lang}.testimonials`]: 1,
+            [`${lang}.locations`]: 1,
+            _id: 0,
+        };
+        const seoProjection = {
+            [`${lang}.home`]: 1,
+            _id: 0,
+        };
+        const [home, seo] = await Promise.all([
+            this.homeModel.findOne().select(projection).lean<IHome | null>(),
+            SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
+        ]);
+        const homeData = home?.[lang];
+        if (!homeData) {
+            throw new ServerError("Home not found", 404);
+        }
+        return responseFormatter(200, "Home fetched successfully", {
+            ...homeData,
+            seo: seo?.[lang]?.home ?? null,
+        });
     }
 }
 

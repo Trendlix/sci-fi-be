@@ -18,6 +18,21 @@ const HeroSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 10
+    },
+    file: {
+        url: {
+            type: String,
+            required: false
+        },
+        path: {
+            type: String,
+            required: false
+        },
+        contentType: String,
+        uploadedAt: {
+            type: Date,
+            default: Date.now
+        }
     }
 }, { _id: false, timestamps: true });
 const DiscoverCardSchema = new mongoose_1.default.Schema({

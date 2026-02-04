@@ -66,8 +66,11 @@ const AboutSchema = new mongoose.Schema({
 const PartnersSchema = new mongoose.Schema({
     description: {
         type: String,
-        required: true,
-        minlength: 10
+        required: false,
+        validate: {
+            validator: (value?: string) => !value || value.length >= 10,
+            message: "Description must be at least 10 characters."
+        }
     },
     files: [{
         url: {
