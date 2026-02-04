@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const events_model_1 = require("../../models/events/events.model");
+const seo_model_1 = require("../../models/seo/seo.model");
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
 class EventServices {
@@ -83,6 +84,35 @@ class EventServices {
         const upcoming = event?.[lang]?.upcoming ?? [];
         const types = Array.from(new Set(upcoming.map((card) => card.type).filter(Boolean)));
         return (0, format_services_1.default)(200, "Event upcoming types fetched successfully", types);
+    }
+    async getEventAll(lang) {
+        const projection = {
+            [`${lang}.hero`]: 1,
+            [`${lang}.about`]: 1,
+            [`${lang}.partners`]: 1,
+            [`${lang}.program`]: 1,
+            [`${lang}.how`]: 1,
+            [`${lang}.ready`]: 1,
+            [`${lang}.featured`]: 1,
+            [`${lang}.upcoming`]: 1,
+            _id: 0,
+        };
+        const seoProjection = {
+            [`${lang}.events`]: 1,
+            _id: 0,
+        };
+        const [event, seo] = await Promise.all([
+            this.eventModel.findOne().select(projection).lean(),
+            seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
+        ]);
+        const eventData = event?.[lang];
+        if (!eventData) {
+            throw new error_services_1.ServerError("Event not found", 404);
+        }
+        return (0, format_services_1.default)(200, "Event fetched successfully", {
+            ...eventData,
+            seo: seo?.[lang]?.events ?? null,
+        });
     }
 }
 exports.default = new EventServices(events_model_1.EventModel);

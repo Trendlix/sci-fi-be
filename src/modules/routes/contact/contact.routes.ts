@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getContactController, patchContactController } from "../../controllers/contact/contact.controllers";
+import { getContactAllController, getContactController, patchContactController } from "../../controllers/contact/contact.controllers";
 import { adminAuth } from "../../../shared/middlewares/admin-auth.middleware";
 import { languageMiddleware } from "../../../shared/middlewares/language.middleware";
 import { zodValidator } from "../../../shared/utils/zod.util";
@@ -9,6 +9,7 @@ const contactRoutes = Router();
 
 contactRoutes.use(languageMiddleware);
 
+contactRoutes.get("/all", getContactAllController);
 contactRoutes.get("/", getContactController);
 contactRoutes.patch("/", adminAuth, zodValidator(contactValidationSchema), patchContactController);
 

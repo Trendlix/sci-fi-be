@@ -87,3 +87,8 @@ export const updateEventUpcomingController = CatchAsyncError(async (req: Request
     res.status(response.status).json(response);
 });
 
+export const getEventAllController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await eventServices.getEventAll(req.lang ?? "en");
+    res.status(response.status).json(response);
+});
+

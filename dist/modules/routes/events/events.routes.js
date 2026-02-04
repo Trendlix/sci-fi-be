@@ -10,6 +10,7 @@ const eventRoutes = (0, express_1.Router)();
 eventRoutes.use(language_middleware_1.languageMiddleware);
 eventRoutes.get("/hero", events_controllers_1.getEventHeroController);
 eventRoutes.patch("/hero", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(events_validation_schemas_1.eventHeroSchema), events_controllers_1.updateEventHeroController);
+eventRoutes.get("/all", events_controllers_1.getEventAllController);
 eventRoutes.get("/about", events_controllers_1.getEventAboutController);
 eventRoutes.patch("/about", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(events_validation_schemas_1.eventAboutSchema), events_controllers_1.updateEventAboutController);
 eventRoutes.get("/partners", events_controllers_1.getEventPartnersController);

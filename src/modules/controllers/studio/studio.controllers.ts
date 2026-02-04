@@ -22,6 +22,11 @@ export const getStudioWhyUsController = CatchAsyncError(async (req: Request, res
     res.status(response.status).json(response);
 });
 
+export const getStudioAllController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await studioServices.getStudioAll(req.lang ?? "en");
+    res.status(response.status).json(response);
+});
+
 export const updateStudioHeroController = CatchAsyncError(async (req: Request, res: Response) => {
     const response = await studioServices.updateStudioHero(req.lang ?? "en", req.body);
     res.status(response.status).json(response);

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const studio_model_1 = require("../../models/studio/studio.model");
+const seo_model_1 = require("../../models/seo/seo.model");
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
 class StudioServices {
@@ -42,6 +43,31 @@ class StudioServices {
             throw new error_services_1.ServerError("Studio why us not found", 404);
         }
         return (0, format_services_1.default)(200, "Studio why us fetched successfully", whyUs);
+    }
+    async getStudioAll(lang) {
+        const projection = {
+            [`${lang}.hero`]: 1,
+            [`${lang}.about`]: 1,
+            [`${lang}.partners`]: 1,
+            [`${lang}.whyUs`]: 1,
+            _id: 0,
+        };
+        const seoProjection = {
+            [`${lang}.studio`]: 1,
+            _id: 0,
+        };
+        const [studio, seo] = await Promise.all([
+            this.studioModel.findOne().select(projection).lean(),
+            seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
+        ]);
+        const studioData = studio?.[lang];
+        if (!studioData) {
+            throw new error_services_1.ServerError("Studio not found", 404);
+        }
+        return (0, format_services_1.default)(200, "Studio fetched successfully", {
+            ...studioData,
+            seo: seo?.[lang]?.studio ?? null,
+        });
     }
     async updateSection(lang, key, payload, notFoundMessage, successMessage) {
         const updatedStudio = await this.studioModel

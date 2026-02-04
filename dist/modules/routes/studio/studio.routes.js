@@ -12,6 +12,7 @@ studioRoutes.get("/hero", studio_controllers_1.getStudioHeroController);
 studioRoutes.get("/about", studio_controllers_1.getStudioAboutController);
 studioRoutes.get("/partners", studio_controllers_1.getStudioPartnersController);
 studioRoutes.get("/why-us", studio_controllers_1.getStudioWhyUsController);
+studioRoutes.get("/all", studio_controllers_1.getStudioAllController);
 studioRoutes.patch("/hero", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(studio_validation_schemas_1.studioHeroSchema), studio_controllers_1.updateStudioHeroController);
 studioRoutes.patch("/about", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(studio_validation_schemas_1.studioAboutSchema), studio_controllers_1.updateStudioAboutController);
 studioRoutes.patch("/partners", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(studio_validation_schemas_1.studioPartnersSchema), studio_controllers_1.updateStudioPartnersController);

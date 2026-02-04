@@ -4,6 +4,7 @@ import {
     getStudioAboutController,
     getStudioPartnersController,
     getStudioWhyUsController,
+    getStudioAllController,
     updateStudioHeroController,
     updateStudioAboutController,
     updateStudioPartnersController,
@@ -27,6 +28,7 @@ studioRoutes.get("/hero", getStudioHeroController);
 studioRoutes.get("/about", getStudioAboutController);
 studioRoutes.get("/partners", getStudioPartnersController);
 studioRoutes.get("/why-us", getStudioWhyUsController);
+studioRoutes.get("/all", getStudioAllController);
 
 studioRoutes.patch("/hero", adminAuth, zodValidator(studioHeroSchema), updateStudioHeroController);
 studioRoutes.patch("/about", adminAuth, zodValidator(studioAboutSchema), updateStudioAboutController);

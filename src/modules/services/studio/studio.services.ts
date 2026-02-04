@@ -1,6 +1,8 @@
 import { Model } from "mongoose";
 import { StudioModel, IStudioModel } from "../../models/studio/studio.model";
 import { IStudio, IStudioAbout, IStudioHero, IStudioPartners, IStudioWhyUs } from "../../models/studio/types/model.types";
+import { SeoModel } from "../../models/seo/seo.model";
+import { ISeo } from "../../models/seo/types/model.types";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
 
@@ -43,6 +45,32 @@ class StudioServices {
             throw new ServerError("Studio why us not found", 404);
         }
         return responseFormatter(200, "Studio why us fetched successfully", whyUs);
+    }
+
+    async getStudioAll(lang: "ar" | "en") {
+        const projection = {
+            [`${lang}.hero`]: 1,
+            [`${lang}.about`]: 1,
+            [`${lang}.partners`]: 1,
+            [`${lang}.whyUs`]: 1,
+            _id: 0,
+        };
+        const seoProjection = {
+            [`${lang}.studio`]: 1,
+            _id: 0,
+        };
+        const [studio, seo] = await Promise.all([
+            this.studioModel.findOne().select(projection).lean<IStudio | null>(),
+            SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
+        ]);
+        const studioData = studio?.[lang];
+        if (!studioData) {
+            throw new ServerError("Studio not found", 404);
+        }
+        return responseFormatter(200, "Studio fetched successfully", {
+            ...studioData,
+            seo: seo?.[lang]?.studio ?? null,
+        });
     }
 
     private async updateSection<T>(

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateEventUpcomingController = exports.getEventUpcomingTypesController = exports.getEventUpcomingController = exports.updateEventFeaturedController = exports.getEventFeaturedController = exports.updateEventReadyController = exports.getEventReadyController = exports.updateEventHowController = exports.getEventHowController = exports.updateEventProgramController = exports.getEventProgramController = exports.updateEventPartnersController = exports.getEventPartnersController = exports.updateEventAboutController = exports.getEventAboutController = exports.updateEventHeroController = exports.getEventHeroController = void 0;
+exports.getEventAllController = exports.updateEventUpcomingController = exports.getEventUpcomingTypesController = exports.getEventUpcomingController = exports.updateEventFeaturedController = exports.getEventFeaturedController = exports.updateEventReadyController = exports.getEventReadyController = exports.updateEventHowController = exports.getEventHowController = exports.updateEventProgramController = exports.getEventProgramController = exports.updateEventPartnersController = exports.getEventPartnersController = exports.updateEventAboutController = exports.getEventAboutController = exports.updateEventHeroController = exports.getEventHeroController = void 0;
 const error_services_1 = __importDefault(require("../../../services/error.services"));
 const events_services_1 = __importDefault(require("../../services/events/events.services"));
 exports.getEventHeroController = (0, error_services_1.default)(async (req, res) => {
@@ -72,5 +72,9 @@ exports.getEventUpcomingTypesController = (0, error_services_1.default)(async (r
 });
 exports.updateEventUpcomingController = (0, error_services_1.default)(async (req, res) => {
     const response = await events_services_1.default.patchUpcoming(req.lang ?? "en", req.body);
+    res.status(response.status).json(response);
+});
+exports.getEventAllController = (0, error_services_1.default)(async (req, res) => {
+    const response = await events_services_1.default.getEventAll(req.lang ?? "en");
     res.status(response.status).json(response);
 });

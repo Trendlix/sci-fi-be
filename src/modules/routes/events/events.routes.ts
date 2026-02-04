@@ -7,6 +7,7 @@ import {
     getEventHowController,
     getEventProgramController,
     getEventReadyController,
+    getEventAllController,
     getEventUpcomingTypesController,
     getEventUpcomingController,
     updateEventAboutController,
@@ -38,6 +39,8 @@ eventRoutes.use(languageMiddleware);
 
 eventRoutes.get("/hero", getEventHeroController);
 eventRoutes.patch("/hero", adminAuth, zodValidator(eventHeroSchema), updateEventHeroController);
+
+eventRoutes.get("/all", getEventAllController);
 
 eventRoutes.get("/about", getEventAboutController);
 eventRoutes.patch("/about", adminAuth, zodValidator(eventAboutSchema), updateEventAboutController);

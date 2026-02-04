@@ -1,6 +1,8 @@
 import { Model } from "mongoose";
 import { EventModel, IEventModel } from "../../models/events/events.model";
 import { IEvent, IEventBase } from "../../models/events/types/model.types";
+import { SeoModel } from "../../models/seo/seo.model";
+import { ISeo } from "../../models/seo/types/model.types";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
 
@@ -112,6 +114,36 @@ class EventServices {
         const upcoming = event?.[lang]?.upcoming ?? [];
         const types = Array.from(new Set(upcoming.map((card) => card.type).filter(Boolean)));
         return responseFormatter(200, "Event upcoming types fetched successfully", types);
+    }
+
+    async getEventAll(lang: "ar" | "en") {
+        const projection = {
+            [`${lang}.hero`]: 1,
+            [`${lang}.about`]: 1,
+            [`${lang}.partners`]: 1,
+            [`${lang}.program`]: 1,
+            [`${lang}.how`]: 1,
+            [`${lang}.ready`]: 1,
+            [`${lang}.featured`]: 1,
+            [`${lang}.upcoming`]: 1,
+            _id: 0,
+        };
+        const seoProjection = {
+            [`${lang}.events`]: 1,
+            _id: 0,
+        };
+        const [event, seo] = await Promise.all([
+            this.eventModel.findOne().select(projection).lean<IEvent | null>(),
+            SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
+        ]);
+        const eventData = event?.[lang];
+        if (!eventData) {
+            throw new ServerError("Event not found", 404);
+        }
+        return responseFormatter(200, "Event fetched successfully", {
+            ...eventData,
+            seo: seo?.[lang]?.events ?? null,
+        });
     }
 }
 

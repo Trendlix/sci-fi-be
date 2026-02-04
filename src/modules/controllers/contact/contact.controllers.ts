@@ -7,6 +7,11 @@ export const getContactController = CatchAsyncError(async (req: Request, res: Re
     res.status(response.status).json(response);
 });
 
+export const getContactAllController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await contactServices.getContactAll(req.lang ?? "en");
+    res.status(response.status).json(response);
+});
+
 export const patchContactController = CatchAsyncError(async (req: Request, res: Response) => {
     const response = await contactServices.patchContact(req.lang ?? "en", req.body);
     res.status(response.status).json(response);
