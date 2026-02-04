@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: sci-fi-be
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB_NAME
+        value: sci-fi
+
