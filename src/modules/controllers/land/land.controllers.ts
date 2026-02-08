@@ -27,6 +27,11 @@ export const getLandFloorsController = CatchAsyncError(async (req: Request, res:
     res.status(response.status).json(response);
 });
 
+export const getLandFloorsOptionsController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await landServices.getLandFloorsOptions(req.lang ?? "en");
+    res.status(response.status).json(response);
+});
+
 export const updateLandFloorsController = CatchAsyncError(async (req: Request, res: Response) => {
     const response = await landServices.updateLandFloors(req.lang ?? "en", req.body);
     res.status(response.status).json(response);

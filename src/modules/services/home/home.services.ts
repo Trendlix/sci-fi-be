@@ -3,7 +3,7 @@ import { HomeModel, IHomeModel } from "../../models/home/home.model";
 import { SeoModel, ISeoModel } from "../../models/seo/seo.model";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
-import { IAbout, IHero, IHorizontal, ILocation, ITestimonial, IHome, IHomeBase } from "../../models/home/types/model.types";
+import { IAbout, IHero, IHorizontal, ILocationSection, ITestimonial, IHome, IHomeBase } from "../../models/home/types/model.types";
 import { ISeo } from "../../models/seo/types/model.types";
 
 class HomeServices {
@@ -44,6 +44,12 @@ class HomeServices {
         if (!testimonials) {
             throw new ServerError("Home testimonials not found", 404);
         }
+        if (Array.isArray(testimonials)) {
+            return responseFormatter(200, "Home testimonials fetched successfully", {
+                title: ["", ""],
+                cards: testimonials,
+            });
+        }
         return responseFormatter(200, "Home testimonials fetched successfully", testimonials);
     }
 
@@ -52,6 +58,12 @@ class HomeServices {
         const locations = home?.[lang]?.locations;
         if (!locations) {
             throw new ServerError("Home locations not found", 404);
+        }
+        if (Array.isArray(locations)) {
+            return responseFormatter(200, "Home locations fetched successfully", {
+                title: ["", ""],
+                cards: locations,
+            });
         }
         return responseFormatter(200, "Home locations fetched successfully", locations);
     }
@@ -63,11 +75,18 @@ class HomeServices {
                 description: "..........",
             },
             about: {
+                title: ["", ""],
                 description: ["", "", "", "", ""],
             },
             horizontal: [],
-            testimonials: [],
-            locations: [],
+            testimonials: {
+                title: ["", ""],
+                cards: [],
+            },
+            locations: {
+                title: ["", ""],
+                cards: [],
+            },
         };
     }
 
@@ -134,7 +153,7 @@ class HomeServices {
         return responseFormatter(200, "Home horizontal updated successfully", updatedHorizontal);
     }
 
-    async updateHomeTestimonials(lang: "ar" | "en", testimonials: ITestimonial[]) {
+    async updateHomeTestimonials(lang: "ar" | "en", testimonials: ITestimonial) {
         await this.ensureHomeDocument();
         const updatedHome = await this.homeModel.findOneAndUpdate(
             {},
@@ -150,7 +169,7 @@ class HomeServices {
         return responseFormatter(200, "Home testimonials updated successfully", updatedTestimonials);
     }
 
-    async updateHomeLocations(lang: "ar" | "en", locations: ILocation[]) {
+    async updateHomeLocations(lang: "ar" | "en", locations: ILocationSection) {
         await this.ensureHomeDocument();
         const updatedHome = await this.homeModel.findOneAndUpdate(
             {},

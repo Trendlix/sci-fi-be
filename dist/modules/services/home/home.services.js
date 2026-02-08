@@ -42,6 +42,12 @@ class HomeServices {
         if (!testimonials) {
             throw new error_services_1.ServerError("Home testimonials not found", 404);
         }
+        if (Array.isArray(testimonials)) {
+            return (0, format_services_1.default)(200, "Home testimonials fetched successfully", {
+                title: ["", ""],
+                cards: testimonials,
+            });
+        }
         return (0, format_services_1.default)(200, "Home testimonials fetched successfully", testimonials);
     }
     async getHomeLocations(lang) {
@@ -49,6 +55,12 @@ class HomeServices {
         const locations = home?.[lang]?.locations;
         if (!locations) {
             throw new error_services_1.ServerError("Home locations not found", 404);
+        }
+        if (Array.isArray(locations)) {
+            return (0, format_services_1.default)(200, "Home locations fetched successfully", {
+                title: ["", ""],
+                cards: locations,
+            });
         }
         return (0, format_services_1.default)(200, "Home locations fetched successfully", locations);
     }
@@ -59,11 +71,18 @@ class HomeServices {
                 description: "..........",
             },
             about: {
+                title: ["", ""],
                 description: ["", "", "", "", ""],
             },
             horizontal: [],
-            testimonials: [],
-            locations: [],
+            testimonials: {
+                title: ["", ""],
+                cards: [],
+            },
+            locations: {
+                title: ["", ""],
+                cards: [],
+            },
         };
     }
     buildEmptyHomeDocument() {

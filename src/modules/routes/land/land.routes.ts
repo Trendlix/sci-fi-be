@@ -5,6 +5,7 @@ import {
     getLandDiscoverFloorsController,
     updateLandDiscoverFloorsController,
     getLandFloorsController,
+    getLandFloorsOptionsController,
     updateLandFloorsController,
     getLandServicesBirthdayController,
     updateLandServicesBirthdayController,
@@ -35,6 +36,7 @@ landRoutes.use(languageMiddleware);
 landRoutes.get("/hero", getLandHeroController);
 landRoutes.get("/discover-floors", getLandDiscoverFloorsController);
 landRoutes.get("/floors", getLandFloorsController);
+landRoutes.get("/floors/options", getLandFloorsOptionsController);
 landRoutes.get("/services/birthday", getLandServicesBirthdayController);
 landRoutes.get("/services/membership", getLandServicesMembershipController);
 landRoutes.get("/services/school-nursery", getLandServicesSchoolNurseryController);

@@ -11,6 +11,7 @@ landRoutes.use(language_middleware_1.languageMiddleware);
 landRoutes.get("/hero", land_controllers_1.getLandHeroController);
 landRoutes.get("/discover-floors", land_controllers_1.getLandDiscoverFloorsController);
 landRoutes.get("/floors", land_controllers_1.getLandFloorsController);
+landRoutes.get("/floors/options", land_controllers_1.getLandFloorsOptionsController);
 landRoutes.get("/services/birthday", land_controllers_1.getLandServicesBirthdayController);
 landRoutes.get("/services/membership", land_controllers_1.getLandServicesMembershipController);
 landRoutes.get("/services/school-nursery", land_controllers_1.getLandServicesSchoolNurseryController);

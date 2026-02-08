@@ -58,6 +58,7 @@ exports.landDiscoverFloorsSchema = z.object({
 });
 const floorSchema = z.object({
     title: z.string().min(3).max(20),
+    floor: z.string().optional(),
     description: z.string().min(10),
     file: fileSchema.optional(),
 });

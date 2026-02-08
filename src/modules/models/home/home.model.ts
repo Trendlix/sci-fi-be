@@ -22,6 +22,14 @@ const HeroSchema = new mongoose.Schema(
 
 const AboutSchema = new mongoose.Schema(
     {
+        title: {
+            type: [String],
+            required: true,
+            validate: {
+                validator: (v: string[]) => v.length === 2,
+                message: "Title must have exactly 2 words."
+            }
+        },
         description: {
             type: [String],
             required: true,
@@ -84,7 +92,7 @@ const HorizontalSchema = new mongoose.Schema(
     { timestamps: true, _id: false }
 );
 
-const TestmonialsSchema = new mongoose.Schema(
+const TestmonialsCardSchema = new mongoose.Schema(
     {
         name: {
             type: String,
@@ -93,8 +101,8 @@ const TestmonialsSchema = new mongoose.Schema(
         },
         title: {
             type: String,
-            default: 'Customer',
-            minlength: 3
+            required: true,
+            minlength: 1
         },
         message: {
             type: String,
@@ -106,21 +114,24 @@ const TestmonialsSchema = new mongoose.Schema(
             required: true,
             min: 1,
             max: 5
-        },
-        avatar: {
-            url: {
-                type: String,
-                required: false
-            },
-            path: {
-                type: String,
-                required: false
-            },
-            contentType: String,
-            uploadedAt: {
-                type: Date,
-                default: Date.now
+        }
+    },
+    { timestamps: true, _id: false }
+);
+
+const TestimonialsSchema = new mongoose.Schema(
+    {
+        title: {
+            type: [String],
+            required: true,
+            validate: {
+                validator: (v: string[]) => v.length === 2,
+                message: "Title must have exactly 2 words."
             }
+        },
+        cards: {
+            type: [TestmonialsCardSchema],
+            required: true,
         }
     },
     { timestamps: true, _id: false }
@@ -147,6 +158,24 @@ const LocationsSchema = new mongoose.Schema(
     { timestamps: true, _id: false }
 );
 
+const LocationsSectionSchema = new mongoose.Schema(
+    {
+        title: {
+            type: [String],
+            required: true,
+            validate: {
+                validator: (v: string[]) => v.length === 2,
+                message: "Title must have exactly 2 words."
+            }
+        },
+        cards: {
+            type: [LocationsSchema],
+            required: true,
+        }
+    },
+    { timestamps: true, _id: false }
+);
+
 const HomeBaseSchema = new mongoose.Schema({
     hero: HeroSchema,
     about: AboutSchema,
@@ -154,14 +183,8 @@ const HomeBaseSchema = new mongoose.Schema({
         type: [HorizontalSchema],
         default: []
     },
-    testimonials: {
-        type: [TestmonialsSchema],
-        default: []
-    },
-    locations: {
-        type: [LocationsSchema],
-        default: []
-    }
+    testimonials: TestimonialsSchema,
+    locations: LocationsSectionSchema
 }, { timestamps: true, _id: false });
 
 const HomeSchema = new mongoose.Schema(

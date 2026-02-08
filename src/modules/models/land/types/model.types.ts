@@ -27,6 +27,7 @@ export interface IFloor {
     title: string;
     description: string;
     file: ILandFile;
+    floor?: string;
 }
 
 

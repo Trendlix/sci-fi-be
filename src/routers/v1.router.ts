@@ -5,6 +5,7 @@ import contactRoutes from "../modules/routes/contact/contact.routes";
 import aboutRoutes from "../modules/routes/about/about.routes";
 import studioRoutes from "../modules/routes/studio/studio.routes";
 import landRoutes from "../modules/routes/land/land.routes";
+import floorRoutes from "../modules/routes/floor/floor.routes";
 import eventRoutes from "../modules/routes/events/events.routes";
 import seoRoutes from "../modules/routes/seo/seo.routes";
 
@@ -16,6 +17,7 @@ v1Router.use("/contact", contactRoutes);
 v1Router.use("/about", aboutRoutes);
 v1Router.use("/studio", studioRoutes);
 v1Router.use("/land", landRoutes);
+v1Router.use("/floor", floorRoutes);
 v1Router.use("/events", eventRoutes);
 v1Router.use("/seo", seoRoutes);
 

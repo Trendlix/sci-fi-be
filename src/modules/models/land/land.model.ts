@@ -88,6 +88,11 @@ const FloorsSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 20
     },
+    floor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Floor",
+        required: false,
+    },
     description: {
         type: String,
         required: true,

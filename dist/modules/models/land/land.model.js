@@ -89,6 +89,11 @@ const FloorsSchema = new mongoose_1.default.Schema({
         minlength: 3,
         maxlength: 20
     },
+    floor: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Floor",
+        required: false,
+    },
     description: {
         type: String,
         required: true,

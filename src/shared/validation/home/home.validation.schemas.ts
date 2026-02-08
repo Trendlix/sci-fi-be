@@ -1,18 +1,12 @@
 import * as z from "zod";
 
-const fileSchema = z.object({
-    url: z.string().optional(),
-    path: z.string().optional(),
-    contentType: z.string().optional(),
-    uploadedAt: z.string().optional(),
-});
-
 export const homeHeroSchema = z.object({
     title: z.array(z.string().min(1)).length(6),
     description: z.string().min(10),
 });
 
 export const homeAboutSchema = z.object({
+    title: z.array(z.string().min(1)).length(2),
     description: z.array(z.string().min(1)).length(5),
 });
 
@@ -51,15 +45,19 @@ const horizontalSchema = z.object({
 
 export const homeHorizontalSchema = z.array(horizontalSchema).min(1);
 
-const testimonialSchema = z.object({
+const testimonialCardSchema = z.object({
     name: z.string().min(3),
-    title: z.string().optional(),
+    title: z.string().min(1),
     message: z.string().min(10),
     rating: z.number().min(1).max(5),
-    avatar: fileSchema.optional(),
 });
 
-export const homeTestimonialsSchema = z.array(testimonialSchema).min(1);
+const testimonialSchema = z.object({
+    title: z.array(z.string().min(1)).length(2),
+    cards: z.array(testimonialCardSchema).min(1),
+});
+
+export const homeTestimonialsSchema = testimonialSchema;
 
 const locationSchema = z.object({
     title: z.string().min(3),
@@ -67,5 +65,8 @@ const locationSchema = z.object({
     mapUrl: z.string().min(1),
 });
 
-export const homeLocationsSchema = z.array(locationSchema).min(1);
+export const homeLocationsSchema = z.object({
+    title: z.array(z.string().min(1)).length(2),
+    cards: z.array(locationSchema).min(1),
+});
 

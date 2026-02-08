@@ -53,6 +53,20 @@ class LandServices {
     async getLandFloors(lang) {
         return this.getSection(lang, "floors", "Land floors not found", "Land floors fetched successfully");
     }
+    async getLandFloorsOptions(lang) {
+        const land = await this.landModel.findOne().select(`${lang}.floors`).lean();
+        const floors = land?.[lang]?.floors;
+        if (!floors) {
+            throw new error_services_1.ServerError("Land floors not found", 404);
+        }
+        const options = floors
+            .map((floor, index) => ({
+            id: `${index}`,
+            title: floor.title ?? "",
+        }))
+            .filter((floor) => floor.title);
+        return (0, format_services_1.default)(200, "Land floors options fetched successfully", options);
+    }
     async updateLandFloors(lang, payload) {
         return this.updateSection(lang, "floors", payload, "Land floors not found", "Land floors updated successfully");
     }

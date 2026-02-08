@@ -4,6 +4,7 @@ export interface IHero {
 }
 
 export interface IAbout {
+  title: string[];
   description: string[];
 }
 
@@ -19,19 +20,16 @@ export interface IHorizontal {
   description: string[];
 }
 
-export interface IAvatar {
-  url?: string;
-  path?: string;
-  contentType?: string;
-  uploadedAt?: Date;
+export interface ITestimonialCard {
+  name: string;
+  title: string;
+  message: string;
+  rating: number;
 }
 
 export interface ITestimonial {
-  name: string;
-  title?: string;
-  message: string;
-  rating: number;
-  avatar?: IAvatar;
+  title: string[];
+  cards: ITestimonialCard[];
 }
 
 export interface ILocation {
@@ -40,12 +38,17 @@ export interface ILocation {
   mapUrl: string;
 }
 
+export interface ILocationSection {
+  title: string[];
+  cards: ILocation[];
+}
+
 export interface IHomeBase {
   hero: IHero;
   about: IAbout;
   horizontal: IHorizontal[];
-  testimonials: ITestimonial[];
-  locations: ILocation[];
+  testimonials: ITestimonial;
+  locations: ILocationSection;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -10,6 +10,7 @@ const contact_routes_1 = __importDefault(require("../modules/routes/contact/cont
 const about_routes_1 = __importDefault(require("../modules/routes/about/about.routes"));
 const studio_routes_1 = __importDefault(require("../modules/routes/studio/studio.routes"));
 const land_routes_1 = __importDefault(require("../modules/routes/land/land.routes"));
+const floor_routes_1 = __importDefault(require("../modules/routes/floor/floor.routes"));
 const events_routes_1 = __importDefault(require("../modules/routes/events/events.routes"));
 const seo_routes_1 = __importDefault(require("../modules/routes/seo/seo.routes"));
 const v1Router = (0, express_1.Router)();
@@ -19,6 +20,7 @@ v1Router.use("/contact", contact_routes_1.default);
 v1Router.use("/about", about_routes_1.default);
 v1Router.use("/studio", studio_routes_1.default);
 v1Router.use("/land", land_routes_1.default);
+v1Router.use("/floor", floor_routes_1.default);
 v1Router.use("/events", events_routes_1.default);
 v1Router.use("/seo", seo_routes_1.default);
 exports.default = v1Router;

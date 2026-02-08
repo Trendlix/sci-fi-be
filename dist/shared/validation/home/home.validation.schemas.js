@@ -35,17 +35,12 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.homeLocationsSchema = exports.homeTestimonialsSchema = exports.homeHorizontalSchema = exports.homeAboutSchema = exports.homeHeroSchema = void 0;
 const z = __importStar(require("zod"));
-const fileSchema = z.object({
-    url: z.string().optional(),
-    path: z.string().optional(),
-    contentType: z.string().optional(),
-    uploadedAt: z.string().optional(),
-});
 exports.homeHeroSchema = z.object({
     title: z.array(z.string().min(1)).length(6),
     description: z.string().min(10),
 });
 exports.homeAboutSchema = z.object({
+    title: z.array(z.string().min(1)).length(2),
     description: z.array(z.string().min(1)).length(5),
 });
 const horizontalLinkSchema = z
@@ -80,17 +75,23 @@ const horizontalSchema = z.object({
     description: z.array(z.string().min(1)).min(1),
 });
 exports.homeHorizontalSchema = z.array(horizontalSchema).min(1);
-const testimonialSchema = z.object({
+const testimonialCardSchema = z.object({
     name: z.string().min(3),
-    title: z.string().optional(),
+    title: z.string().min(1),
     message: z.string().min(10),
     rating: z.number().min(1).max(5),
-    avatar: fileSchema.optional(),
 });
-exports.homeTestimonialsSchema = z.array(testimonialSchema).min(1);
+const testimonialSchema = z.object({
+    title: z.array(z.string().min(1)).length(2),
+    cards: z.array(testimonialCardSchema).min(1),
+});
+exports.homeTestimonialsSchema = testimonialSchema;
 const locationSchema = z.object({
     title: z.string().min(3),
     address: z.string().min(10),
     mapUrl: z.string().min(1),
 });
-exports.homeLocationsSchema = z.array(locationSchema).min(1);
+exports.homeLocationsSchema = z.object({
+    title: z.array(z.string().min(1)).length(2),
+    cards: z.array(locationSchema).min(1),
+});
