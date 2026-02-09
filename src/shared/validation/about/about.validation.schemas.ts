@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const heroSchema = z.object({
-    title: z.array(z.string().min(1)).length(6),
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
 });
 
@@ -17,25 +17,27 @@ const aboutCardSchema = z.object({
 });
 
 export const aboutMinSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
     cards: z.array(aboutCardSchema).min(1).max(2),
 });
 
 const serviceCardSchema = z.object({
-    tag: z.string().min(3).max(500),
+    tag: z.string().min(3),
     icon: z.string().min(1),
-    title: z.string().min(3).max(500),
-    description: z.string().min(10).max(500),
+    title: z.string().min(3),
+    description: z.string().min(10),
 });
 
 export const serviceSchema = z.object({
-    description: z.string().min(10).max(500),
+    title: z.array(z.string().min(1)).min(2),
+    description: z.string().min(10),
     cards: z.array(serviceCardSchema).min(1),
 });
 
 export const preValueSchema = z.object({
     title: z.array(z.string().min(1)).length(5),
-    description: z.string().min(10).max(500),
+    description: z.string().min(10),
     file: z
         .object({
             url: z.string().optional(),
@@ -48,12 +50,13 @@ export const preValueSchema = z.object({
 
 const valueCardSchema = z.object({
     icon: z.string().min(1),
-    title: z.string().min(3).max(500),
-    description: z.string().min(10).max(500),
+    title: z.string().min(3),
+    description: z.string().min(10),
 });
 
 export const valueSchema = z.object({
-    description: z.string().min(10).max(500),
+    title: z.array(z.string().min(1)).min(2),
+    description: z.string().min(10),
     cards: z.array(valueCardSchema).min(1),
 });
 

@@ -11,7 +11,7 @@ export interface IFloorHeader {
 }
 
 export interface IFloorHero {
-    title: string;
+    title: string[];
     description: string;
     files: IFloorFile[];
 }
@@ -34,6 +34,7 @@ export interface IFloorServiceCard {
 }
 
 export interface IFloorServices {
+    title: string[];
     hidden?: boolean;
     description: string;
     cards: IFloorServiceCard[];
@@ -47,6 +48,7 @@ export interface IFloorGroundCard {
 }
 
 export interface IFloorGrounds {
+    title: string[];
     hidden?: boolean;
     cards: IFloorGroundCard[];
 }
@@ -58,6 +60,7 @@ export interface IFloorSliderCard {
 }
 
 export interface IFloorSlider {
+    title: string[];
     description: string;
     cards: IFloorSliderCard[];
 }

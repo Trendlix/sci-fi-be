@@ -8,25 +8,35 @@ const fileSchema = z.object({
 });
 
 export const landHeroSchema = z.object({
-    title: z.array(z.string().min(1)).length(6),
+    title: z.array(z.string().min(1)).min(3),
     description: z.string().min(10),
     file: fileSchema.optional(),
 });
 
+export const landTestimonialsTitleSchema = z.object({
+    title: z.array(z.string().min(1)).min(3),
+});
+
 const discoverCardSchema = z.object({
-    title: z.string().min(3).max(20),
-    description: z.string().min(10),
+    title: z.string().min(3),
+    description: z.union([z.string().min(10), z.literal("")]).optional(),
     icon: fileSchema,
     link: z.string().min(1),
 });
 
 export const landDiscoverFloorsSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
     cards: z.array(discoverCardSchema).min(6),
 });
 
+export const landServicesHeaderSchema = z.object({
+    title: z.array(z.string().min(1)).min(4),
+    description: z.string().min(10),
+});
+
 const floorSchema = z.object({
-    title: z.string().min(3).max(20),
+    title: z.string().min(3),
     floor: z.string().optional(),
     description: z.string().min(10),
     file: fileSchema.optional(),
@@ -40,23 +50,24 @@ const birthdayPackageSchema = z.object({
         weekdays: z.number().min(1),
         weekends: z.number().min(1),
     }),
-    description: z.array(z.string().min(1)).min(1).max(3),
+    description: z.array(z.string().min(1)).min(1),
     highlights: z.array(z.string().min(1)).min(3),
 });
 
 const birthdayDiamondSchema = z.object({
     oldPrice: z.number().min(1),
     price: z.number().min(1),
-    description: z.array(z.string().min(1)).min(1).max(3),
-    highlights: z.array(z.string().min(1)).min(3).max(80),
+    description: z.array(z.string().min(1)).min(1),
+    highlights: z.array(z.string().min(1)).min(3),
 });
 
 const birthdayPrinceSchema = z.object({
-    title: z.string().min(3).max(20),
+    title: z.string().min(3),
     description: z.string().min(10),
 });
 
 export const landBirthdaySchema = z.object({
+    modalDescription: z.string().min(10),
     price: z.number().min(1),
     description: z.string().min(10),
     files: z.array(fileSchema).min(1).optional(),
@@ -72,13 +83,13 @@ const membershipHoursSchema = z.object({
     icon: z.string().min(1),
     highlight: z.object({
         no: z.number().min(1),
-        line: z.string().min(3).max(30),
+        line: z.string().min(3),
     }),
 });
 
 const membershipCardSchema = z.object({
     icon: z.string().min(1),
-    title: z.string().min(3).max(20),
+    title: z.string().min(3),
     hours: z.object({
         perMonth: membershipHoursSchema,
         perWeek: membershipHoursSchema,
@@ -101,8 +112,8 @@ export const landMembershipSchema = z.object({
     packages: z.object({
         description: z.string().min(10),
         years: z.object({
-            3: membershipCardSchema,
-            6: membershipCardSchema,
+            3: z.array(membershipCardSchema).min(3).max(6),
+            6: z.array(membershipCardSchema).min(3).max(6),
         }),
     }),
 });
@@ -110,7 +121,7 @@ export const landMembershipSchema = z.object({
 const schoolNurseryHighlightSchema = z.object({
     icon: z.string().min(1),
     line: z.object({
-        title: z.string().min(3).max(20),
+        title: z.string().min(3),
         description: z.string().min(10),
     }),
 });
@@ -127,18 +138,18 @@ export const landSchoolNurserySchema = z.object({
 
 const walkinCardSchema = z.object({
     icon: z.string().min(1),
-    title: z.string().min(3).max(20),
+    title: z.string().min(3),
     description: z.string().min(10),
 });
 
 const walkinHighlightCardSchema = z.object({
     icon: z.string().min(1),
-    title: z.string().min(3).max(20),
+    title: z.string().min(3),
     highlights: z.array(z.string().min(1)).min(3),
 });
 
 const joinerFileSchema = z.object({
-    tag: z.string().min(3).max(20),
+    tag: z.string().min(3),
     url: z.string().min(1),
     path: z.string().min(1),
     contentType: z.string().optional(),

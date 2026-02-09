@@ -22,8 +22,8 @@ const GetInTouchSchema = new mongoose_1.default.Schema({
         type: [String],
         required: true,
         validate: {
-            validator: (v) => v.length >= 1 && v.length <= 2,
-            message: "Lines must have between 1 and 2 items."
+            validator: (v) => v.length >= 1 && v.length <= 1,
+            message: "Lines must have at least 1 item."
         }
     }
 }, { timestamps: true, _id: false });

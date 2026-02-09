@@ -8,6 +8,7 @@ import landRoutes from "../modules/routes/land/land.routes";
 import floorRoutes from "../modules/routes/floor/floor.routes";
 import eventRoutes from "../modules/routes/events/events.routes";
 import seoRoutes from "../modules/routes/seo/seo.routes";
+import footerRoutes from "../modules/routes/footer/footer.routes";
 
 const v1Router = Router();
 
@@ -20,5 +21,6 @@ v1Router.use("/land", landRoutes);
 v1Router.use("/floor", floorRoutes);
 v1Router.use("/events", eventRoutes);
 v1Router.use("/seo", seoRoutes);
+v1Router.use("/footer", footerRoutes);
 
 export default v1Router;

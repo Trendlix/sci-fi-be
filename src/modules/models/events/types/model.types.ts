@@ -22,13 +22,20 @@ export interface IEventAboutCard {
 }
 
 export interface IEventAbout {
+    title: string[];
     description: string;
     cards: IEventAboutCard[];
 }
 
 export interface IEventPartners {
+    title: string[];
     description: string;
     files: IFile[];
+}
+
+export interface IEventNewsLetter {
+    title: string[];
+    description: string;
 }
 
 export interface IEventProgramCard {
@@ -78,6 +85,7 @@ export interface IEventFeaturedCard {
 }
 
 export interface IEventFeatured {
+    title: string[];
     description: string;
     cards: IEventFeaturedCard[];
 }
@@ -97,6 +105,7 @@ export interface IEventBase {
     about: IEventAbout;
     partners: IEventPartners;
     program: IEventProgram;
+    newsLetter: IEventNewsLetter;
     how: IEventHow;
     ready: IEventReady;
     featured: IEventFeatured;

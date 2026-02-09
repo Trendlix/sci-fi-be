@@ -10,8 +10,8 @@ const HeroSchema = new mongoose_1.default.Schema({
         type: mongoose_1.default.Schema.Types.Array,
         required: true,
         validate: {
-            validator: (v) => v.length === 6,
-            message: "Title must have exactly 6 words."
+            validator: (v) => v.length >= 3,
+            message: "Title must have at least 3 words."
         }
     },
     description: {
@@ -48,7 +48,6 @@ const AboutCardSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 20
     },
     description: {
         type: String,
@@ -56,6 +55,14 @@ const AboutCardSchema = new mongoose_1.default.Schema({
     }
 }, { _id: false, timestamps: true });
 const AboutSchema = new mongoose_1.default.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v) => v.length >= 2,
+            message: "Title must have at least 2 items."
+        }
+    },
     description: {
         type: String,
         required: true,
@@ -64,6 +71,14 @@ const AboutSchema = new mongoose_1.default.Schema({
     cards: [AboutCardSchema]
 }, { _id: false, timestamps: true });
 const PartnersSchema = new mongoose_1.default.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v) => v.length >= 2,
+            message: "Title must have at least 2 items."
+        }
+    },
     description: {
         type: String,
         required: false,
@@ -89,6 +104,14 @@ const PartnersSchema = new mongoose_1.default.Schema({
         }]
 }, { _id: false, timestamps: true });
 const WhyUsSchema = new mongoose_1.default.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v) => v.length >= 2,
+            message: "Title must have at least 2 items."
+        }
+    },
     description: {
         type: String,
         required: true,
@@ -103,7 +126,6 @@ const WhyUsSchema = new mongoose_1.default.Schema({
                 type: String,
                 required: true,
                 minlength: 3,
-                maxlength: 200
             }
         }]
 }, { _id: false, timestamps: true });

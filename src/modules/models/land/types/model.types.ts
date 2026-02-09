@@ -13,12 +13,13 @@ export interface ILandHero {
 
 export interface IDiscoverCard {
     title: string;
-    description: string;
+    description?: string;
     icon: ILandFile;
     link: string;
 }
 
 export interface IDiscoverFloors {
+    title: string[];
     description: string;
     cards: IDiscoverCard[];
 }
@@ -54,6 +55,7 @@ export interface IServiceBirthDayPartyPrincePackage {
 }
 
 export interface IServiceBirthDayParty {
+    modalDescription: string;
     price: number;
     description: string;
     files?: ILandFile[];
@@ -102,8 +104,8 @@ export interface IServiceMembershipPackages {
     packages: {
         description: string;
         years: {
-            3: IServiceMembershipPackagesCard;
-            6: IServiceMembershipPackagesCard;
+            3: IServiceMembershipPackagesCard[];
+            6: IServiceMembershipPackagesCard[];
         };
     };
 }
@@ -161,6 +163,8 @@ export interface IServiceWalkin {
 }
 
 export interface IServices {
+    title: string[];
+    description: string;
     birthDayParty: IServiceBirthDayParty;
     membershipPackages: IServiceMembershipPackages;
     schoolTripsAndNursery: IServiceSchoolTripsAndNursery;
@@ -171,6 +175,7 @@ export interface ILandBase {
     hero: ILandHero;
     discoverFloors: IDiscoverFloors;
     floors: IFloor[];
+    testimonialsTitle: string[];
     services: IServices;
 }
 

@@ -42,30 +42,33 @@ const fileSchema = z.object({
     uploadedAt: z.string().optional(),
 });
 exports.studioHeroSchema = z.object({
-    title: z.array(z.string().min(1)).length(6),
+    title: z.array(z.string().min(1)).min(3),
     description: z.string().min(10),
 });
 const aboutCardSchema = z.object({
     tag: z.string().min(1),
     file: fileSchema.optional(),
     icon: z.string().min(1),
-    title: z.string().min(3).max(20),
+    title: z.string().min(3),
     description: z.string().min(1),
 });
 exports.studioAboutSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
     cards: z.array(aboutCardSchema).min(1),
 });
 const optionalPartnersDescription = z.union([z.string().min(10), z.literal("")]).optional();
 exports.studioPartnersSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     description: optionalPartnersDescription,
     files: z.array(fileSchema).min(1),
 });
 const whyUsLineSchema = z.object({
     icon: z.string().min(1),
-    line: z.string().min(3).max(200),
+    line: z.string().min(3),
 });
 exports.studioWhyUsSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
     lines: z.array(whyUsLineSchema).min(1),
 });

@@ -36,7 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.aboutValidationSchema = exports.valueSchema = exports.preValueSchema = exports.serviceSchema = exports.aboutMinSchema = exports.heroSchema = void 0;
 const z = __importStar(require("zod"));
 exports.heroSchema = z.object({
-    title: z.array(z.string().min(1)).length(6),
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
 });
 const aboutCardSchema = z.object({
@@ -50,22 +50,24 @@ const aboutCardSchema = z.object({
     description: z.string().min(1),
 });
 exports.aboutMinSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
     cards: z.array(aboutCardSchema).min(1).max(2),
 });
 const serviceCardSchema = z.object({
-    tag: z.string().min(3).max(500),
+    tag: z.string().min(3),
     icon: z.string().min(1),
-    title: z.string().min(3).max(500),
-    description: z.string().min(10).max(500),
+    title: z.string().min(3),
+    description: z.string().min(10),
 });
 exports.serviceSchema = z.object({
-    description: z.string().min(10).max(500),
+    title: z.array(z.string().min(1)).min(2),
+    description: z.string().min(10),
     cards: z.array(serviceCardSchema).min(1),
 });
 exports.preValueSchema = z.object({
     title: z.array(z.string().min(1)).length(5),
-    description: z.string().min(10).max(500),
+    description: z.string().min(10),
     file: z
         .object({
         url: z.string().optional(),
@@ -77,11 +79,12 @@ exports.preValueSchema = z.object({
 });
 const valueCardSchema = z.object({
     icon: z.string().min(1),
-    title: z.string().min(3).max(500),
-    description: z.string().min(10).max(500),
+    title: z.string().min(3),
+    description: z.string().min(10),
 });
 exports.valueSchema = z.object({
-    description: z.string().min(10).max(500),
+    title: z.array(z.string().min(1)).min(2),
+    description: z.string().min(10),
     cards: z.array(valueCardSchema).min(1),
 });
 exports.aboutValidationSchema = z

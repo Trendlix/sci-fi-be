@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const footer_controllers_1 = require("../../controllers/footer/footer.controllers");
+const admin_auth_middleware_1 = require("../../../shared/middlewares/admin-auth.middleware");
+const language_middleware_1 = require("../../../shared/middlewares/language.middleware");
+const zod_util_1 = require("../../../shared/utils/zod.util");
+const footer_validation_schemas_1 = require("../../../shared/validation/footer/footer.validation.schemas");
+const footerRoutes = (0, express_1.Router)();
+footerRoutes.use(language_middleware_1.languageMiddleware);
+footerRoutes.get("/", footer_controllers_1.getFooterController);
+footerRoutes.patch("/", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(footer_validation_schemas_1.footerValidationSchema), footer_controllers_1.patchFooterController);
+exports.default = footerRoutes;

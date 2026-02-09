@@ -10,14 +10,17 @@ const HeroSchema = new mongoose_1.default.Schema({
         type: mongoose_1.default.Schema.Types.Array,
         required: true,
         validate: {
-            validator: (v) => v.length === 6,
-            message: "Title must have exactly 6 words."
+            validator: (v) => v.length >= 3,
+            message: "Title must have at least 3 words."
         }
     },
     description: {
         type: String,
-        required: true,
-        minlength: 10
+        required: false,
+        validate: {
+            validator: (value) => !value || value.length >= 10,
+            message: "Description must be at least 10 characters."
+        }
     },
     file: {
         url: {
@@ -40,12 +43,14 @@ const DiscoverCardSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 20
     },
     description: {
         type: String,
-        required: true,
-        minlength: 10
+        required: false,
+        validate: {
+            validator: (value) => !value || value.length >= 10,
+            message: "Description must be at least 10 characters."
+        }
     },
     icon: {
         url: {
@@ -68,6 +73,14 @@ const DiscoverCardSchema = new mongoose_1.default.Schema({
     }
 }, { _id: false, timestamps: true });
 const DiscoverFloorsSchema = new mongoose_1.default.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v) => v.length >= 2,
+            message: "Title must have at least 2 items."
+        }
+    },
     description: {
         type: String,
         required: true,
@@ -87,7 +100,6 @@ const FloorsSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 20
     },
     floor: {
         type: mongoose_1.default.Schema.Types.ObjectId,
@@ -174,6 +186,11 @@ const ServicesFileSchema = new mongoose_1.default.Schema({
     }
 }, { _id: false, timestamps: true });
 const ServicesBirthDayPartySchema = new mongoose_1.default.Schema({
+    modalDescription: {
+        type: String,
+        required: true,
+        minlength: 10
+    },
     price: {
         type: Number,
         required: true,
@@ -211,7 +228,6 @@ const ServicesBirthDayPartySchema = new mongoose_1.default.Schema({
                 type: mongoose_1.default.Schema.Types.Array,
                 required: true,
                 minlength: 3,
-                maxlength: 80,
                 validate: {
                     validator: (v) => v.length >= 3,
                     message: "Highlights must have at least 3 items."
@@ -223,7 +239,6 @@ const ServicesBirthDayPartySchema = new mongoose_1.default.Schema({
                 type: String,
                 required: true,
                 minlength: 3,
-                maxlength: 20
             },
             description: {
                 type: String,
@@ -242,7 +257,6 @@ const ServicesMembershipPackagesCardSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 20
     },
     hours: {
         perMonth: {
@@ -259,7 +273,6 @@ const ServicesMembershipPackagesCardSchema = new mongoose_1.default.Schema({
                     type: String,
                     required: true,
                     minlength: 3,
-                    maxlength: 30
                 }
             }
         },
@@ -277,7 +290,6 @@ const ServicesMembershipPackagesCardSchema = new mongoose_1.default.Schema({
                     type: String,
                     required: true,
                     minlength: 3,
-                    maxlength: 30
                 }
             }
         },
@@ -295,7 +307,6 @@ const ServicesMembershipPackagesCardSchema = new mongoose_1.default.Schema({
                     type: String,
                     required: true,
                     minlength: 3,
-                    maxlength: 30
                 }
             }
         },
@@ -355,12 +366,20 @@ const ServicesMembershipPackagesSchema = new mongoose_1.default.Schema({
         },
         years: {
             3: {
-                type: ServicesMembershipPackagesCardSchema,
+                type: [ServicesMembershipPackagesCardSchema],
                 required: true,
+                validate: {
+                    validator: (v) => Array.isArray(v) && v.length >= 3 && v.length <= 6,
+                    message: "Each year must include between 3 and 6 plans."
+                }
             },
             6: {
-                type: ServicesMembershipPackagesCardSchema,
+                type: [ServicesMembershipPackagesCardSchema],
                 required: true,
+                validate: {
+                    validator: (v) => Array.isArray(v) && v.length >= 3 && v.length <= 6,
+                    message: "Each year must include between 3 and 6 plans."
+                }
             }
         }
     }
@@ -381,7 +400,6 @@ const ServicesSchoolTripsAndNurseryBaseSchema = new mongoose_1.default.Schema({
                 type: String,
                 required: true,
                 minlength: 3,
-                maxlength: 20
             },
             description: {
                 type: String,
@@ -406,7 +424,6 @@ const ServicesWalkinSchema = new mongoose_1.default.Schema({
                 type: String,
                 required: true,
                 minlength: 3,
-                maxlength: 20
             },
             description: {
                 type: String,
@@ -425,7 +442,6 @@ const ServicesWalkinSchema = new mongoose_1.default.Schema({
                 type: String,
                 required: true,
                 minlength: 3,
-                maxlength: 20
             },
             highlights: {
                 type: mongoose_1.default.Schema.Types.Array,
@@ -453,7 +469,6 @@ const ServicesWalkinSchema = new mongoose_1.default.Schema({
                     type: String,
                     required: true,
                     minlength: 3,
-                    maxlength: 20
                 },
                 url: {
                     type: String,
@@ -486,7 +501,6 @@ const ServicesWalkinSchema = new mongoose_1.default.Schema({
                     type: String,
                     required: true,
                     minlength: 3,
-                    maxlength: 20
                 },
                 url: {
                     type: String,
@@ -506,6 +520,19 @@ const ServicesWalkinSchema = new mongoose_1.default.Schema({
     }
 }, { _id: false, timestamps: true });
 const ServicesSchema = new mongoose_1.default.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v) => v.length >= 4,
+            message: "Title must have at least 4 items."
+        }
+    },
+    description: {
+        type: String,
+        required: true,
+        minlength: 10
+    },
     birthDayParty: ServicesBirthDayPartySchema,
     membershipPackages: ServicesMembershipPackagesSchema,
     schoolTripsAndNursery: ServicesSchoolTripsAndNurserySchema,
@@ -517,6 +544,14 @@ const LandBaseSchema = new mongoose_1.default.Schema({
     floors: {
         type: [FloorsSchema],
         required: true,
+    },
+    testimonialsTitle: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v) => v.length >= 3,
+            message: "Title must have at least 3 items."
+        }
     },
     services: ServicesSchema,
 }, { _id: false, timestamps: true });

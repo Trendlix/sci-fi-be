@@ -55,6 +55,12 @@ class EventServices {
     async patchProgram(lang, payload) {
         return this.patchSection(lang, "program", payload, "Event program updated successfully");
     }
+    async getNewsLetter(lang) {
+        return this.getSection(lang, "newsLetter", "Event newsletter fetched successfully");
+    }
+    async patchNewsLetter(lang, payload) {
+        return this.patchSection(lang, "newsLetter", payload, "Event newsletter updated successfully");
+    }
     async getHow(lang) {
         return this.getSection(lang, "how", "Event how fetched successfully");
     }
@@ -91,6 +97,7 @@ class EventServices {
             [`${lang}.about`]: 1,
             [`${lang}.partners`]: 1,
             [`${lang}.program`]: 1,
+            [`${lang}.newsLetter`]: 1,
             [`${lang}.how`]: 1,
             [`${lang}.ready`]: 1,
             [`${lang}.featured`]: 1,

@@ -46,7 +46,7 @@ exports.floorHeaderSchema = z.object({
     description: z.string().min(10),
 });
 exports.floorHeroSchema = z.object({
-    title: z.string().min(3),
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
     files: z.array(fileSchema).length(3),
 });
@@ -65,6 +65,7 @@ const servicesCardSchema = z.object({
     files: z.array(fileSchema).min(1).optional(),
 });
 exports.floorServicesSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     hidden: z.boolean().optional(),
     description: z.string().min(10),
     cards: z.array(servicesCardSchema).min(1),
@@ -76,6 +77,7 @@ const groundsCardSchema = z.object({
     cta: z.string().min(3),
 });
 exports.floorGroundsSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     hidden: z.boolean().optional(),
     cards: z.array(groundsCardSchema).min(1),
 });
@@ -88,6 +90,7 @@ const sliderCardSchema = z.object({
     description: z.string().min(10),
 });
 exports.floorSliderSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
     cards: z.array(sliderCardSchema).min(1),
 });

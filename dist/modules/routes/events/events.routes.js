@@ -17,6 +17,8 @@ eventRoutes.get("/partners", events_controllers_1.getEventPartnersController);
 eventRoutes.patch("/partners", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(events_validation_schemas_1.eventPartnersSchema), events_controllers_1.updateEventPartnersController);
 eventRoutes.get("/program", events_controllers_1.getEventProgramController);
 eventRoutes.patch("/program", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(events_validation_schemas_1.eventProgramSchema), events_controllers_1.updateEventProgramController);
+eventRoutes.get("/newsletter", events_controllers_1.getEventNewsLetterController);
+eventRoutes.patch("/newsletter", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(events_validation_schemas_1.eventNewsLetterSchema), events_controllers_1.updateEventNewsLetterController);
 eventRoutes.get("/how", events_controllers_1.getEventHowController);
 eventRoutes.patch("/how", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(events_validation_schemas_1.eventHowSchema), events_controllers_1.updateEventHowController);
 eventRoutes.get("/ready", events_controllers_1.getEventReadyController);

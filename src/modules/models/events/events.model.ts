@@ -45,6 +45,14 @@ const HeroSchema = new mongoose.Schema({
 }, { _id: false, timestamps: true });
 
 const AboutSchema = new mongoose.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v: string[]) => v.length >= 2,
+            message: "Title must have at least 2 items."
+        }
+    },
     description: {
         type: String,
         required: true,
@@ -70,6 +78,14 @@ const AboutSchema = new mongoose.Schema({
 }, { _id: false, timestamps: true });
 
 const PartnersSchema = new mongoose.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v: string[]) => v.length >= 2,
+            message: "Title must have at least 2 items."
+        }
+    },
     description: {
         type: String,
         required: true,
@@ -92,31 +108,29 @@ const PartnersSchema = new mongoose.Schema({
     }]
 }, { _id: false, timestamps: true });
 
-const ProgramCardSchema = new mongoose.Schema({
-    icon: {
-        type: String,
-        required: true
-    },
+
+
+const ProgramSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true,
+        minlength: 10
     },
-    features: {
-        type: [String],
-        required: true,
-        validate: {
-            validator: (v: string[]) => v.length <= 5,
-            message: "Features must have at most 5 items."
+    file: {
+        url: {
+            type: String,
+            required: false
+        },
+        path: {
+            type: String,
+            required: false
+        },
+        contentType: String,
+        uploadedAt: {
+            type: Date,
+            default: Date.now
         }
     }
-}, { _id: false, timestamps: true });
-
-const ProgramSchema = new mongoose.Schema({
-    vr_arena: ProgramCardSchema,
-    printing_lab_3d: ProgramCardSchema,
-    innovation_lab: ProgramCardSchema,
-    tech_museum: ProgramCardSchema,
-    digital_art_studio: ProgramCardSchema
 }, { _id: false, timestamps: true });
 
 
@@ -232,8 +246,8 @@ const FeaturedCardSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Array,
         required: true,
         validate: {
-            validator: (v: String[]) => v.length <= 3,
-            message: "Highlights at most be 3"
+            validator: (v: String[]) => v.length >= 3,
+            message: "Highlights must have at least 3 items."
         }
     },
     description: {
@@ -243,6 +257,14 @@ const FeaturedCardSchema = new mongoose.Schema({
     }
 }, { _id: false, timestamps: true })
 const FeaturedSchema = new mongoose.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v: string[]) => v.length === 2,
+            message: "Title must have exactly 2 items."
+        }
+    },
     description: {
         type: String,
         required: true
@@ -291,8 +313,8 @@ const UpcomingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Array,
         required: true,
         validate: {
-            validator: (highlights: String[]) => highlights.length <= 3,
-            message: "highlights max count is 3."
+            validator: (v: string[]) => v.length >= 3,
+            message: "highlights must have at least 3 items."
         }
     },
     description: {
@@ -306,11 +328,29 @@ const UpcomingSchema = new mongoose.Schema({
     }
 }, { _id: false, timestamps: true });
 
+
+const NewsLetterSchema = new mongoose.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v: string[]) => v.length >= 2,
+            message: "Title must have at least 2 items."
+        }
+    },
+    description: {
+        type: String,
+        required: true,
+        minlength: 10
+    }
+}, { _id: false, timestamps: true });
+
 const EventBaseSchema = new mongoose.Schema({
     hero: HeroSchema,
     about: AboutSchema,
     partners: PartnersSchema,
     program: ProgramSchema,
+    newsLetter: NewsLetterSchema,
     how: HowSchema,
     ready: ReadySchema,
     featured: FeaturedSchema,

@@ -7,6 +7,7 @@ import {
     getEventHowController,
     getEventProgramController,
     getEventReadyController,
+    getEventNewsLetterController,
     getEventAllController,
     getEventUpcomingTypesController,
     getEventUpcomingController,
@@ -18,6 +19,7 @@ import {
     updateEventProgramController,
     updateEventReadyController,
     updateEventUpcomingController,
+    updateEventNewsLetterController,
 } from "../../controllers/events/events.controllers";
 import { adminAuth } from "../../../shared/middlewares/admin-auth.middleware";
 import { languageMiddleware } from "../../../shared/middlewares/language.middleware";
@@ -29,6 +31,7 @@ import {
     eventHeroSchema,
     eventHowSchema,
     eventProgramSchema,
+    eventNewsLetterSchema,
     eventReadySchema,
     eventUpcomingSchema,
 } from "../../../shared/validation/events/events.validation.schemas";
@@ -50,6 +53,9 @@ eventRoutes.patch("/partners", adminAuth, zodValidator(eventPartnersSchema), upd
 
 eventRoutes.get("/program", getEventProgramController);
 eventRoutes.patch("/program", adminAuth, zodValidator(eventProgramSchema), updateEventProgramController);
+
+eventRoutes.get("/newsletter", getEventNewsLetterController);
+eventRoutes.patch("/newsletter", adminAuth, zodValidator(eventNewsLetterSchema), updateEventNewsLetterController);
 
 eventRoutes.get("/how", getEventHowController);
 eventRoutes.patch("/how", adminAuth, zodValidator(eventHowSchema), updateEventHowController);

@@ -7,6 +7,10 @@ import {
     getLandFloorsController,
     getLandFloorsOptionsController,
     updateLandFloorsController,
+    getLandTestimonialsTitleController,
+    updateLandTestimonialsTitleController,
+    getLandServicesHeaderController,
+    updateLandServicesHeaderController,
     getLandServicesBirthdayController,
     updateLandServicesBirthdayController,
     getLandServicesMembershipController,
@@ -23,6 +27,8 @@ import {
     landHeroSchema,
     landDiscoverFloorsSchema,
     landFloorsSchema,
+    landTestimonialsTitleSchema,
+    landServicesHeaderSchema,
     landBirthdaySchema,
     landMembershipSchema,
     landSchoolNurserySchema,
@@ -37,6 +43,8 @@ landRoutes.get("/hero", getLandHeroController);
 landRoutes.get("/discover-floors", getLandDiscoverFloorsController);
 landRoutes.get("/floors", getLandFloorsController);
 landRoutes.get("/floors/options", getLandFloorsOptionsController);
+landRoutes.get("/testimonials-title", getLandTestimonialsTitleController);
+landRoutes.get("/services/header", getLandServicesHeaderController);
 landRoutes.get("/services/birthday", getLandServicesBirthdayController);
 landRoutes.get("/services/membership", getLandServicesMembershipController);
 landRoutes.get("/services/school-nursery", getLandServicesSchoolNurseryController);
@@ -45,6 +53,8 @@ landRoutes.get("/services/walkin", getLandServicesWalkinController);
 landRoutes.patch("/hero", adminAuth, zodValidator(landHeroSchema), updateLandHeroController);
 landRoutes.patch("/discover-floors", adminAuth, zodValidator(landDiscoverFloorsSchema), updateLandDiscoverFloorsController);
 landRoutes.patch("/floors", adminAuth, zodValidator(landFloorsSchema), updateLandFloorsController);
+landRoutes.patch("/testimonials-title", adminAuth, zodValidator(landTestimonialsTitleSchema), updateLandTestimonialsTitleController);
+landRoutes.patch("/services/header", adminAuth, zodValidator(landServicesHeaderSchema), updateLandServicesHeaderController);
 landRoutes.patch("/services/birthday", adminAuth, zodValidator(landBirthdaySchema), updateLandServicesBirthdayController);
 landRoutes.patch("/services/membership", adminAuth, zodValidator(landMembershipSchema), updateLandServicesMembershipController);
 landRoutes.patch("/services/school-nursery", adminAuth, zodValidator(landSchoolNurserySchema), updateLandServicesSchoolNurseryController);

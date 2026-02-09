@@ -19,11 +19,13 @@ export interface IStudioAboutCard {
 }
 
 export interface IStudioAbout {
+    title: string[];
     description: string;
     cards: IStudioAboutCard[];
 }
 
 export interface IStudioPartners {
+    title: string[];
     description?: string;
     files: IStudioFile[];
 }
@@ -34,6 +36,7 @@ export interface IStudioWhyUsLine {
 }
 
 export interface IStudioWhyUs {
+    title: string[];
     description: string;
     lines: IStudioWhyUsLine[];
 }

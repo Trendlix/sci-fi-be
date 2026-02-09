@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEventAllController = exports.updateEventUpcomingController = exports.getEventUpcomingTypesController = exports.getEventUpcomingController = exports.updateEventFeaturedController = exports.getEventFeaturedController = exports.updateEventReadyController = exports.getEventReadyController = exports.updateEventHowController = exports.getEventHowController = exports.updateEventProgramController = exports.getEventProgramController = exports.updateEventPartnersController = exports.getEventPartnersController = exports.updateEventAboutController = exports.getEventAboutController = exports.updateEventHeroController = exports.getEventHeroController = void 0;
+exports.getEventAllController = exports.updateEventUpcomingController = exports.getEventUpcomingTypesController = exports.getEventUpcomingController = exports.updateEventFeaturedController = exports.getEventFeaturedController = exports.updateEventReadyController = exports.getEventReadyController = exports.updateEventHowController = exports.getEventHowController = exports.updateEventNewsLetterController = exports.getEventNewsLetterController = exports.updateEventProgramController = exports.getEventProgramController = exports.updateEventPartnersController = exports.getEventPartnersController = exports.updateEventAboutController = exports.getEventAboutController = exports.updateEventHeroController = exports.getEventHeroController = void 0;
 const error_services_1 = __importDefault(require("../../../services/error.services"));
 const events_services_1 = __importDefault(require("../../services/events/events.services"));
 exports.getEventHeroController = (0, error_services_1.default)(async (req, res) => {
@@ -36,6 +36,14 @@ exports.getEventProgramController = (0, error_services_1.default)(async (req, re
 });
 exports.updateEventProgramController = (0, error_services_1.default)(async (req, res) => {
     const response = await events_services_1.default.patchProgram(req.lang ?? "en", req.body);
+    res.status(response.status).json(response);
+});
+exports.getEventNewsLetterController = (0, error_services_1.default)(async (req, res) => {
+    const response = await events_services_1.default.getNewsLetter(req.lang ?? "en");
+    res.status(response.status).json(response);
+});
+exports.updateEventNewsLetterController = (0, error_services_1.default)(async (req, res) => {
+    const response = await events_services_1.default.patchNewsLetter(req.lang ?? "en", req.body);
     res.status(response.status).json(response);
 });
 exports.getEventHowController = (0, error_services_1.default)(async (req, res) => {

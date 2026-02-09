@@ -13,7 +13,7 @@ export const floorHeaderSchema = z.object({
 });
 
 export const floorHeroSchema = z.object({
-    title: z.string().min(3),
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
     files: z.array(fileSchema).length(3),
 });
@@ -36,6 +36,7 @@ const servicesCardSchema = z.object({
 });
 
 export const floorServicesSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     hidden: z.boolean().optional(),
     description: z.string().min(10),
     cards: z.array(servicesCardSchema).min(1),
@@ -49,6 +50,7 @@ const groundsCardSchema = z.object({
 });
 
 export const floorGroundsSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     hidden: z.boolean().optional(),
     cards: z.array(groundsCardSchema).min(1),
 });
@@ -64,6 +66,7 @@ const sliderCardSchema = z.object({
 });
 
 export const floorSliderSchema = z.object({
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
     cards: z.array(sliderCardSchema).min(1),
 });

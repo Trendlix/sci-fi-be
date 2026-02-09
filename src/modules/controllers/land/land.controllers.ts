@@ -37,6 +37,26 @@ export const updateLandFloorsController = CatchAsyncError(async (req: Request, r
     res.status(response.status).json(response);
 });
 
+export const getLandTestimonialsTitleController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await landServices.getLandTestimonialsTitle(req.lang ?? "en");
+    res.status(response.status).json(response);
+});
+
+export const updateLandTestimonialsTitleController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await landServices.updateLandTestimonialsTitle(req.lang ?? "en", req.body.title);
+    res.status(response.status).json(response);
+});
+
+export const getLandServicesHeaderController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await landServices.getLandServicesHeader(req.lang ?? "en");
+    res.status(response.status).json(response);
+});
+
+export const updateLandServicesHeaderController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await landServices.updateLandServicesHeader(req.lang ?? "en", req.body);
+    res.status(response.status).json(response);
+});
+
 export const getLandServicesBirthdayController = CatchAsyncError(async (req: Request, res: Response) => {
     const response = await landServices.getLandServicesBirthday(req.lang ?? "en");
     res.status(response.status).json(response);

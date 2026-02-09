@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateLandServicesWalkinController = exports.getLandServicesWalkinController = exports.updateLandServicesSchoolNurseryController = exports.getLandServicesSchoolNurseryController = exports.updateLandServicesMembershipController = exports.getLandServicesMembershipController = exports.updateLandServicesBirthdayController = exports.getLandServicesBirthdayController = exports.updateLandFloorsController = exports.getLandFloorsOptionsController = exports.getLandFloorsController = exports.updateLandDiscoverFloorsController = exports.getLandDiscoverFloorsController = exports.updateLandHeroController = exports.getLandHeroController = void 0;
+exports.updateLandServicesWalkinController = exports.getLandServicesWalkinController = exports.updateLandServicesSchoolNurseryController = exports.getLandServicesSchoolNurseryController = exports.updateLandServicesMembershipController = exports.getLandServicesMembershipController = exports.updateLandServicesBirthdayController = exports.getLandServicesBirthdayController = exports.updateLandServicesHeaderController = exports.getLandServicesHeaderController = exports.updateLandTestimonialsTitleController = exports.getLandTestimonialsTitleController = exports.updateLandFloorsController = exports.getLandFloorsOptionsController = exports.getLandFloorsController = exports.updateLandDiscoverFloorsController = exports.getLandDiscoverFloorsController = exports.updateLandHeroController = exports.getLandHeroController = void 0;
 const error_services_1 = __importDefault(require("../../../services/error.services"));
 const land_services_1 = __importDefault(require("../../services/land/land.services"));
 exports.getLandHeroController = (0, error_services_1.default)(async (req, res) => {
@@ -32,6 +32,22 @@ exports.getLandFloorsOptionsController = (0, error_services_1.default)(async (re
 });
 exports.updateLandFloorsController = (0, error_services_1.default)(async (req, res) => {
     const response = await land_services_1.default.updateLandFloors(req.lang ?? "en", req.body);
+    res.status(response.status).json(response);
+});
+exports.getLandTestimonialsTitleController = (0, error_services_1.default)(async (req, res) => {
+    const response = await land_services_1.default.getLandTestimonialsTitle(req.lang ?? "en");
+    res.status(response.status).json(response);
+});
+exports.updateLandTestimonialsTitleController = (0, error_services_1.default)(async (req, res) => {
+    const response = await land_services_1.default.updateLandTestimonialsTitle(req.lang ?? "en", req.body.title);
+    res.status(response.status).json(response);
+});
+exports.getLandServicesHeaderController = (0, error_services_1.default)(async (req, res) => {
+    const response = await land_services_1.default.getLandServicesHeader(req.lang ?? "en");
+    res.status(response.status).json(response);
+});
+exports.updateLandServicesHeaderController = (0, error_services_1.default)(async (req, res) => {
+    const response = await land_services_1.default.updateLandServicesHeader(req.lang ?? "en", req.body);
     res.status(response.status).json(response);
 });
 exports.getLandServicesBirthdayController = (0, error_services_1.default)(async (req, res) => {

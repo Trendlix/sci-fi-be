@@ -84,6 +84,45 @@ class LandServices {
         return this.updateSection<IFloor[]>(lang, "floors", payload, "Land floors not found", "Land floors updated successfully");
     }
 
+    async getLandTestimonialsTitle(lang: "ar" | "en") {
+        return this.getSection<string[]>(lang, "testimonialsTitle", "Land testimonials title not found", "Land testimonials title fetched successfully");
+    }
+
+    async updateLandTestimonialsTitle(lang: "ar" | "en", payload: string[]) {
+        return this.updateSection<string[]>(lang, "testimonialsTitle", payload, "Land testimonials title not found", "Land testimonials title updated successfully");
+    }
+
+    async getLandServicesHeader(lang: "ar" | "en") {
+        const land = await this.landModel.findOne().select(`${lang}.services.title ${lang}.services.description`).lean<ILand | null>();
+        const services = land?.[lang]?.services;
+        if (!services) {
+            throw new ServerError("Land services header not found", 404);
+        }
+        return responseFormatter(200, "Land services header fetched successfully", {
+            title: services.title ?? [],
+            description: services.description ?? "",
+        });
+    }
+
+    async updateLandServicesHeader(lang: "ar" | "en", payload: { title: string[]; description: string }) {
+        const updatedLand = await this.landModel
+            .findOneAndUpdate(
+                {},
+                { $set: { [`${lang}.services.title`]: payload.title, [`${lang}.services.description`]: payload.description } },
+                { new: true, runValidators: true, upsert: true, setDefaultsOnInsert: false }
+            )
+            .select(`${lang}.services.title ${lang}.services.description`)
+            .lean<ILand | null>();
+        const services = updatedLand?.[lang]?.services;
+        if (!services) {
+            throw new ServerError("Land services header not found", 404);
+        }
+        return responseFormatter(200, "Land services header updated successfully", {
+            title: services.title ?? [],
+            description: services.description ?? "",
+        });
+    }
+
     async getLandServicesBirthday(lang: "ar" | "en") {
         return this.getSection<IServiceBirthDayParty>(lang, "services.birthDayParty", "Land birthday service not found", "Land birthday service fetched successfully");
     }

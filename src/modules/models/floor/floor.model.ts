@@ -17,9 +17,12 @@ const HeaderSchema = new mongoose.Schema({
 
 const HeroSchema = new mongoose.Schema({
     title: {
-        type: String,
+        type: [String],
         required: true,
-        minlength: 3,
+        validate: {
+            validator: (v: string[]) => v.length >= 2,
+            message: "Title must have at least 2 items.",
+        },
     },
     description: {
         type: String,
@@ -95,6 +98,14 @@ const FeaturesSchema = new mongoose.Schema({
 }, { _id: false, timestamps: true });
 
 const ServicesSchema = new mongoose.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v: string[]) => v.length >= 2,
+            message: "Title must have at least 2 items.",
+        },
+    },
     hidden: {
         type: Boolean,
         default: false,
@@ -153,6 +164,14 @@ const ServicesSchema = new mongoose.Schema({
 }, { _id: false, timestamps: true });
 
 const GroundsSchema = new mongoose.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v: string[]) => v.length >= 2,
+            message: "Title must have at least 2 items.",
+        },
+    },
     hidden: {
         type: Boolean,
         default: false,
@@ -200,6 +219,14 @@ const GroundsSchema = new mongoose.Schema({
 }, { _id: false, timestamps: true });
 
 const FloorsSliderSchema = new mongoose.Schema({
+    title: {
+        type: [String],
+        required: true,
+        validate: {
+            validator: (v: string[]) => v.length >= 2,
+            message: "Title must have at least 2 items.",
+        },
+    },
     description: {
         type: String,
         required: true,

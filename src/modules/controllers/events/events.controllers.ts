@@ -42,6 +42,16 @@ export const updateEventProgramController = CatchAsyncError(async (req: Request,
     res.status(response.status).json(response);
 });
 
+export const getEventNewsLetterController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await eventServices.getNewsLetter(req.lang ?? "en");
+    res.status(response.status).json(response);
+});
+
+export const updateEventNewsLetterController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await eventServices.patchNewsLetter(req.lang ?? "en", req.body);
+    res.status(response.status).json(response);
+});
+
 export const getEventHowController = CatchAsyncError(async (req: Request, res: Response) => {
     const response = await eventServices.getHow(req.lang ?? "en");
     res.status(response.status).json(response);

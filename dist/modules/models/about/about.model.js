@@ -46,6 +46,14 @@ const AboutCardSchema = new mongoose_1.default.Schema({
     }
 }, { _id: false, timestamps: true });
 const AboutMinSchema = new mongoose_1.default.Schema({
+    title: {
+        type: mongoose_1.default.Schema.Types.Array,
+        required: true,
+        validate: {
+            validator: (v) => v.length >= 2,
+            message: "Title must have at least 2 words.",
+        }
+    },
     description: {
         type: String,
         required: true,
@@ -65,7 +73,6 @@ const ServiceCardSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 500
     },
     icon: {
         type: String,
@@ -75,21 +82,26 @@ const ServiceCardSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 500
     },
     description: {
         type: String,
         required: true,
         minlength: 10,
-        maxlength: 500
     }
 }, { _id: false, timestamps: true });
 const ServiceSchema = new mongoose_1.default.Schema({
+    title: {
+        type: mongoose_1.default.Schema.Types.Array,
+        required: true,
+        validate: {
+            validator: (v) => v.length >= 2,
+            message: "Title must have at least 2 words.",
+        }
+    },
     description: {
         type: String,
         required: true,
         minlength: 10,
-        maxlength: 500
     },
     cards: {
         type: [ServiceCardSchema],
@@ -106,14 +118,13 @@ const PreValueSchema = new mongoose_1.default.Schema({
         required: true,
         validate: {
             validator: (v) => v.length === 5,
-            message: "Title must have exactly 6 words.",
+            message: "Title must have exactly 5 words.",
         }
     },
     description: {
         type: String,
         required: true,
         minlength: 10,
-        maxlength: 500
     },
     file: {
         url: {
@@ -143,21 +154,26 @@ const ValueCardSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 500
     },
     description: {
         type: String,
         required: true,
         minlength: 10,
-        maxlength: 500
     }
 }, { _id: false, timestamps: true });
 const ValueSchema = new mongoose_1.default.Schema({
+    title: {
+        type: mongoose_1.default.Schema.Types.Array,
+        required: true,
+        validate: {
+            validator: (v) => v.length >= 2,
+            message: "Title must have at least 2 words.",
+        }
+    },
     description: {
         type: String,
         required: true,
         minlength: 10,
-        maxlength: 500
     },
     cards: {
         type: [ValueCardSchema],
