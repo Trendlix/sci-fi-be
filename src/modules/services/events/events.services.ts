@@ -2,6 +2,8 @@ import { Model } from "mongoose";
 import { EventModel, IEventModel } from "../../models/events/events.model";
 import { IEvent, IEventBase } from "../../models/events/types/model.types";
 import { SeoModel } from "../../models/seo/seo.model";
+import { FooterModel } from "../../models/footer/footer.model";
+import { IFooter } from "../../models/footer/types/model.types";
 import { ISeo } from "../../models/seo/types/model.types";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
@@ -141,9 +143,14 @@ class EventServices {
             [`${lang}.events`]: 1,
             _id: 0,
         };
-        const [event, seo] = await Promise.all([
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [event, seo, footer] = await Promise.all([
             this.eventModel.findOne().select(projection).lean<IEvent | null>(),
             SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
+            FooterModel.findOne().select(footerProjection).lean<IFooter | null>(),
         ]);
         const eventData = event?.[lang];
         if (!eventData) {
@@ -151,6 +158,7 @@ class EventServices {
         }
         return responseFormatter(200, "Event fetched successfully", {
             ...eventData,
+            footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.events ?? null,
         });
     }

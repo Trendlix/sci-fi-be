@@ -32,26 +32,26 @@ export interface IFloor {
 }
 
 
+export interface IServiceBirthDayPartyPriceItem {
+    price: number;
+    per: string;
+}
+
 export interface IServiceBirthDayPartyPackage {
-    oldPrice: number;
+    title: string;
+    oldPrice?: number;
     price: {
-        weekdays: number;
-        weekends: number;
+        weekdays?: IServiceBirthDayPartyPriceItem;
+        weekends?: IServiceBirthDayPartyPriceItem;
     };
     description: string[];
     highlights: string[];
 }
 
-export interface IServiceBirthDayPartyDiamondPackage {
-    oldPrice: number;
-    price: number;
-    description: string[];
-    highlights: string[];
-}
-
 export interface IServiceBirthDayPartyPrincePackage {
-    title: string;
-    description: string;
+    hidden: boolean;
+    title?: string;
+    description?: string;
 }
 
 export interface IServiceBirthDayParty {
@@ -60,9 +60,7 @@ export interface IServiceBirthDayParty {
     description: string;
     files?: ILandFile[];
     packages: {
-        bronze: IServiceBirthDayPartyPackage;
-        gold: IServiceBirthDayPartyPackage;
-        diamond: IServiceBirthDayPartyDiamondPackage;
+        list: IServiceBirthDayPartyPackage[];
         prince: IServiceBirthDayPartyPrincePackage;
     };
 }

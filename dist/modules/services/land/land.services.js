@@ -4,12 +4,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const land_model_1 = require("../../models/land/land.model");
+const home_model_1 = require("../../models/home/home.model");
+const footer_model_1 = require("../../models/footer/footer.model");
+const seo_model_1 = require("../../models/seo/seo.model");
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
 class LandServices {
     constructor(landModel) {
         this.landModel = landModel;
         this.landModel = landModel;
+    }
+    stripTimestamps(value) {
+        if (Array.isArray(value)) {
+            return value.map((item) => this.stripTimestamps(item));
+        }
+        if (value && typeof value === "object") {
+            const entries = Object.entries(value)
+                .filter(([key]) => key !== "createdAt" && key !== "updatedAt" && key !== "__v")
+                .map(([key, entry]) => [key, this.stripTimestamps(entry)]);
+            return Object.fromEntries(entries);
+        }
+        return value;
     }
     async getSection(lang, path, notFoundMessage, successMessage) {
         const land = await this.landModel.findOne().select(`${lang}.${path}`).lean();
@@ -107,6 +122,17 @@ class LandServices {
     async updateLandServicesBirthday(lang, payload) {
         return this.updateSection(lang, "services.birthDayParty", payload, "Land birthday service not found", "Land birthday service updated successfully");
     }
+    async updateLandServicesBirthdayPrinceVisibility(lang, payload) {
+        const updatedLand = await this.landModel
+            .findOneAndUpdate({}, { $set: { [`${lang}.services.birthDayParty.packages.prince.hidden`]: payload.hidden } }, { new: true, runValidators: true, upsert: true, setDefaultsOnInsert: false })
+            .select(`${lang}.services.birthDayParty`)
+            .lean();
+        const birthDayParty = updatedLand?.[lang]?.services?.birthDayParty;
+        if (!birthDayParty) {
+            throw new error_services_1.ServerError("Land birthday service not found", 404);
+        }
+        return (0, format_services_1.default)(200, "Land birthday prince visibility updated successfully", birthDayParty);
+    }
     async getLandServicesMembership(lang) {
         return this.getSection(lang, "services.membershipPackages", "Land membership service not found", "Land membership service fetched successfully");
     }
@@ -124,6 +150,45 @@ class LandServices {
     }
     async updateLandServicesWalkin(lang, payload) {
         return this.updateSection(lang, "services.walkin", payload, "Land walkin not found", "Land walkin updated successfully");
+    }
+    async getLandAll(lang) {
+        const projection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const seoProjection = {
+            [`${lang}.land`]: 1,
+            _id: 0,
+        };
+        const testimonialsProjection = {
+            [`${lang}.testimonials.cards`]: 1,
+            _id: 0,
+        };
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [land, seo, home, footer] = await Promise.all([
+            this.landModel.findOne().select(projection).lean(),
+            seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
+            home_model_1.HomeModel.findOne().select(testimonialsProjection).lean(),
+            footer_model_1.FooterModel.findOne().select(footerProjection).lean(),
+        ]);
+        const landData = land?.[lang];
+        if (!landData) {
+            throw new error_services_1.ServerError("Land not found", 404);
+        }
+        const testimonialsCards = home?.[lang]?.testimonials?.cards ?? [];
+        const responseData = this.stripTimestamps({
+            ...landData,
+            testimonials: {
+                title: landData.testimonialsTitle ?? [],
+                cards: testimonialsCards,
+            },
+            footer: footer?.[lang] ?? null,
+            seo: seo?.[lang]?.land ?? null,
+        });
+        return (0, format_services_1.default)(200, "Land fetched successfully", responseData);
     }
 }
 exports.default = new LandServices(land_model_1.LandModel);

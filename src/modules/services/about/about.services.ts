@@ -1,5 +1,7 @@
 import { Model } from "mongoose";
 import { AboutModel, IAboutModel } from "../../models/about/about.model";
+import { FooterModel } from "../../models/footer/footer.model";
+import { IFooter } from "../../models/footer/types/model.types";
 import { SeoModel } from "../../models/seo/seo.model";
 import { IAbout, IAboutBase } from "../../models/about/types/model.types";
 import { ISeo } from "../../models/seo/types/model.types";
@@ -78,7 +80,7 @@ class AboutServices {
             [`${lang}.hero`]: 1,
             [`${lang}.about`]: 1,
             [`${lang}.service`]: 1,
-            // [`${lang}.preValue`]: 1,
+            [`${lang}.preValue`]: 1,
             [`${lang}.value`]: 1,
             _id: 0,
         };
@@ -86,9 +88,14 @@ class AboutServices {
             [`${lang}.about`]: 1,
             _id: 0,
         };
-        const [about, seo] = await Promise.all([
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [about, seo, footer] = await Promise.all([
             this.aboutModel.findOne().select(projection).lean<IAbout | null>(),
             SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
+            FooterModel.findOne().select(footerProjection).lean<IFooter | null>(),
         ]);
         const aboutData = about?.[lang];
         if (!aboutData) {
@@ -96,6 +103,7 @@ class AboutServices {
         }
         return responseFormatter(200, "About fetched successfully", {
             ...aboutData,
+            footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.about ?? null,
         });
     }

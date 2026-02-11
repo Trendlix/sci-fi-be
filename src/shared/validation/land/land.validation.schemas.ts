@@ -44,26 +44,48 @@ const floorSchema = z.object({
 
 export const landFloorsSchema = z.array(floorSchema).min(1);
 
-const birthdayPackageSchema = z.object({
-    oldPrice: z.number().min(1),
-    price: z.object({
-        weekdays: z.number().min(1),
-        weekends: z.number().min(1),
-    }),
-    description: z.array(z.string().min(1)).min(1),
-    highlights: z.array(z.string().min(1)).min(3),
+const birthdayPriceItemSchema = z.object({
+    price: z.number().min(1),
+    per: z.string().min(1),
 });
 
-const birthdayDiamondSchema = z.object({
-    oldPrice: z.number().min(1),
-    price: z.number().min(1),
+const birthdayPackageSchema = z.object({
+    title: z.string().min(3),
+    oldPrice: z.number().min(1).optional(),
+    price: z.object({
+        weekdays: birthdayPriceItemSchema.optional(),
+        weekends: birthdayPriceItemSchema.optional(),
+    }).refine((value) => !!(value.weekdays || value.weekends), {
+        message: "At least one of weekdays or weekends price is required.",
+    }),
     description: z.array(z.string().min(1)).min(1),
-    highlights: z.array(z.string().min(1)).min(3),
+    highlights: z.array(z.string().min(1)).min(1),
 });
 
 const birthdayPrinceSchema = z.object({
-    title: z.string().min(3),
-    description: z.string().min(10),
+    hidden: z.boolean(),
+    title: z.string().min(3).optional(),
+    description: z.string().min(10).optional(),
+}).superRefine((value, ctx) => {
+    if (value.hidden) return;
+    if (!value.title?.trim()) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Title is required",
+            path: ["title"],
+        });
+    }
+    if (!value.description?.trim()) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Description is required",
+            path: ["description"],
+        });
+    }
+});
+
+export const landBirthdayPrinceVisibilitySchema = z.object({
+    hidden: z.boolean(),
 });
 
 export const landBirthdaySchema = z.object({
@@ -72,9 +94,7 @@ export const landBirthdaySchema = z.object({
     description: z.string().min(10),
     files: z.array(fileSchema).min(1).optional(),
     packages: z.object({
-        bronze: birthdayPackageSchema,
-        gold: birthdayPackageSchema,
-        diamond: birthdayDiamondSchema,
+        list: z.array(birthdayPackageSchema).min(1),
         prince: birthdayPrinceSchema,
     }),
 });
@@ -112,8 +132,8 @@ export const landMembershipSchema = z.object({
     packages: z.object({
         description: z.string().min(10),
         years: z.object({
-            3: z.array(membershipCardSchema).min(3).max(6),
-            6: z.array(membershipCardSchema).min(3).max(6),
+            3: z.array(membershipCardSchema).min(1),
+            6: z.array(membershipCardSchema).min(1),
         }),
     }),
 });

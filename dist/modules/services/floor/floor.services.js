@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const floor_model_1 = require("../../models/floor/floor.model");
+const footer_model_1 = require("../../models/footer/footer.model");
+const seo_model_1 = require("../../models/seo/seo.model");
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
 class FloorServices {
@@ -48,6 +50,14 @@ class FloorServices {
             throw new error_services_1.ServerError(notFoundMessage, 404);
         }
         return (0, format_services_1.default)(200, successMessage, section);
+    }
+    buildTitleRegex(value) {
+        const trimmed = value.trim();
+        if (!trimmed)
+            return null;
+        const escaped = trimmed.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const pattern = escaped.replace(/\\-+/g, "[-\\s]+");
+        return new RegExp(`^${pattern}$`, "i");
     }
     async updateSection(lang, key, payload, notFoundMessage, successMessage, floorId, floorIndex, floorTitle) {
         const query = {};
@@ -158,6 +168,63 @@ class FloorServices {
         }))
             .filter((floor) => floor.id && floor.title);
         return (0, format_services_1.default)(200, "Floor options fetched successfully", options);
+    }
+    async getFloorAll(lang, floorId, floorIndex, floorTitle) {
+        const titleRegex = floorTitle?.trim() ? this.buildTitleRegex(floorTitle) : null;
+        const floorIndexCandidates = typeof floorIndex === "number"
+            ? [floorIndex, ...(floorIndex > 0 ? [floorIndex - 1] : [])]
+            : [];
+        const projection = {
+            [`${lang}`]: 1,
+            landFloorIndex: 1,
+            landFloorTitle: 1,
+            _id: 0,
+        };
+        const seoProjection = {
+            [`${lang}.land`]: 1,
+            _id: 0,
+        };
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [floor, seo, footer] = await Promise.all([
+            (async () => {
+                if (floorId) {
+                    return this.floorModel.findOne({ _id: floorId }).select(projection).lean();
+                }
+                const queries = [];
+                if (floorIndexCandidates.length) {
+                    floorIndexCandidates.forEach((index) => {
+                        const baseQuery = { landFloorIndex: index };
+                        if (titleRegex) {
+                            queries.push({ ...baseQuery, [`landFloorTitle.${lang}`]: titleRegex });
+                        }
+                        queries.push(baseQuery);
+                    });
+                }
+                if (titleRegex) {
+                    queries.push({ [`landFloorTitle.${lang}`]: titleRegex });
+                }
+                for (const query of queries) {
+                    const match = await this.floorModel.findOne(query).select(projection).lean();
+                    if (match)
+                        return match;
+                }
+                return null;
+            })(),
+            seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
+            footer_model_1.FooterModel.findOne().select(footerProjection).lean(),
+        ]);
+        const floorData = floor?.[lang];
+        if (!floorData) {
+            throw new error_services_1.ServerError("Floor not found", 404);
+        }
+        return (0, format_services_1.default)(200, "Floor fetched successfully", {
+            ...floorData,
+            footer: footer?.[lang] ?? null,
+            seo: seo?.[lang]?.land ?? null,
+        });
     }
 }
 exports.default = new FloorServices(floor_model_1.FloorModel);

@@ -3,6 +3,9 @@ import { ContactModel, IContactModel } from "../../models/contact/contact.model"
 import { IContact, IContactBase } from "../../models/contact/types/model.types";
 import { HomeModel } from "../../models/home/home.model";
 import { IHome } from "../../models/home/types/model.types";
+import { FooterModel } from "../../models/footer/footer.model";
+import { SeoModel } from "../../models/seo/seo.model";
+import { ISeo } from "../../models/seo/types/model.types";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
 
@@ -21,18 +24,30 @@ class ContactServices {
     }
 
     async getContactAll(lang: "ar" | "en") {
-        const [contact, home] = await Promise.all([
+        const seoProjection = {
+            [`${lang}.contact`]: 1,
+            _id: 0,
+        };
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [contact, home, seo, footer] = await Promise.all([
             this.contactModel.findOne().select(lang).lean<IContact | null>(),
             HomeModel.findOne().select(`${lang}.locations`).lean<IHome | null>(),
+            SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
+            FooterModel.findOne().select(footerProjection).lean(),
         ]);
         const contactBase = contact?.[lang];
         if (!contactBase) {
             throw new ServerError("Contact not found", 404);
         }
-        const locations = home?.[lang]?.locations ?? [];
+        const locations = home?.[lang]?.locations ?? null;
         return responseFormatter(200, "Contact fetched successfully", {
             ...contactBase,
             locations,
+            footer: footer?.[lang] ?? null,
+            seo: seo?.[lang]?.contact ?? null,
         });
     }
 

@@ -67,6 +67,11 @@ export const updateLandServicesBirthdayController = CatchAsyncError(async (req: 
     res.status(response.status).json(response);
 });
 
+export const updateLandServicesBirthdayPrinceVisibilityController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await landServices.updateLandServicesBirthdayPrinceVisibility(req.lang ?? "en", req.body);
+    res.status(response.status).json(response);
+});
+
 export const getLandServicesMembershipController = CatchAsyncError(async (req: Request, res: Response) => {
     const response = await landServices.getLandServicesMembership(req.lang ?? "en");
     res.status(response.status).json(response);
@@ -94,6 +99,11 @@ export const getLandServicesWalkinController = CatchAsyncError(async (req: Reque
 
 export const updateLandServicesWalkinController = CatchAsyncError(async (req: Request, res: Response) => {
     const response = await landServices.updateLandServicesWalkin(req.lang ?? "en", req.body);
+    res.status(response.status).json(response);
+});
+
+export const getLandAllController = CatchAsyncError(async (req: Request, res: Response) => {
+    const response = await landServices.getLandAll(req.lang ?? "en");
     res.status(response.status).json(response);
 });
 

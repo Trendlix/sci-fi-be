@@ -18,12 +18,14 @@ landRoutes.get("/services/birthday", land_controllers_1.getLandServicesBirthdayC
 landRoutes.get("/services/membership", land_controllers_1.getLandServicesMembershipController);
 landRoutes.get("/services/school-nursery", land_controllers_1.getLandServicesSchoolNurseryController);
 landRoutes.get("/services/walkin", land_controllers_1.getLandServicesWalkinController);
+landRoutes.get("/all", land_controllers_1.getLandAllController);
 landRoutes.patch("/hero", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(land_validation_schemas_1.landHeroSchema), land_controllers_1.updateLandHeroController);
 landRoutes.patch("/discover-floors", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(land_validation_schemas_1.landDiscoverFloorsSchema), land_controllers_1.updateLandDiscoverFloorsController);
 landRoutes.patch("/floors", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(land_validation_schemas_1.landFloorsSchema), land_controllers_1.updateLandFloorsController);
 landRoutes.patch("/testimonials-title", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(land_validation_schemas_1.landTestimonialsTitleSchema), land_controllers_1.updateLandTestimonialsTitleController);
 landRoutes.patch("/services/header", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(land_validation_schemas_1.landServicesHeaderSchema), land_controllers_1.updateLandServicesHeaderController);
 landRoutes.patch("/services/birthday", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(land_validation_schemas_1.landBirthdaySchema), land_controllers_1.updateLandServicesBirthdayController);
+landRoutes.patch("/services/birthday/prince/visibility", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(land_validation_schemas_1.landBirthdayPrinceVisibilitySchema), land_controllers_1.updateLandServicesBirthdayPrinceVisibilityController);
 landRoutes.patch("/services/membership", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(land_validation_schemas_1.landMembershipSchema), land_controllers_1.updateLandServicesMembershipController);
 landRoutes.patch("/services/school-nursery", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(land_validation_schemas_1.landSchoolNurserySchema), land_controllers_1.updateLandServicesSchoolNurseryController);
 landRoutes.patch("/services/walkin", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(land_validation_schemas_1.landWalkinSchema), land_controllers_1.updateLandServicesWalkinController);

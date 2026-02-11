@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const studio_model_1 = require("../../models/studio/studio.model");
 const seo_model_1 = require("../../models/seo/seo.model");
+const footer_model_1 = require("../../models/footer/footer.model");
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
 class StudioServices {
@@ -56,9 +57,14 @@ class StudioServices {
             [`${lang}.studio`]: 1,
             _id: 0,
         };
-        const [studio, seo] = await Promise.all([
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [studio, seo, footer] = await Promise.all([
             this.studioModel.findOne().select(projection).lean(),
             seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
+            footer_model_1.FooterModel.findOne().select(footerProjection).lean(),
         ]);
         const studioData = studio?.[lang];
         if (!studioData) {
@@ -66,6 +72,7 @@ class StudioServices {
         }
         return (0, format_services_1.default)(200, "Studio fetched successfully", {
             ...studioData,
+            footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.studio ?? null,
         });
     }

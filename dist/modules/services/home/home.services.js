@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const home_model_1 = require("../../models/home/home.model");
+const footer_model_1 = require("../../models/footer/footer.model");
 const seo_model_1 = require("../../models/seo/seo.model");
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
@@ -166,9 +167,14 @@ class HomeServices {
             [`${lang}.home`]: 1,
             _id: 0,
         };
-        const [home, seo] = await Promise.all([
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [home, seo, footer] = await Promise.all([
             this.homeModel.findOne().select(projection).lean(),
             seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
+            footer_model_1.FooterModel.findOne().select(footerProjection).lean(),
         ]);
         const homeData = home?.[lang];
         if (!homeData) {
@@ -176,6 +182,7 @@ class HomeServices {
         }
         return (0, format_services_1.default)(200, "Home fetched successfully", {
             ...homeData,
+            footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.home ?? null,
         });
     }

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const about_model_1 = require("../../models/about/about.model");
+const footer_model_1 = require("../../models/footer/footer.model");
 const seo_model_1 = require("../../models/seo/seo.model");
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
@@ -58,7 +59,7 @@ class AboutServices {
             [`${lang}.hero`]: 1,
             [`${lang}.about`]: 1,
             [`${lang}.service`]: 1,
-            // [`${lang}.preValue`]: 1,
+            [`${lang}.preValue`]: 1,
             [`${lang}.value`]: 1,
             _id: 0,
         };
@@ -66,9 +67,14 @@ class AboutServices {
             [`${lang}.about`]: 1,
             _id: 0,
         };
-        const [about, seo] = await Promise.all([
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [about, seo, footer] = await Promise.all([
             this.aboutModel.findOne().select(projection).lean(),
             seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
+            footer_model_1.FooterModel.findOne().select(footerProjection).lean(),
         ]);
         const aboutData = about?.[lang];
         if (!aboutData) {
@@ -76,6 +82,7 @@ class AboutServices {
         }
         return (0, format_services_1.default)(200, "About fetched successfully", {
             ...aboutData,
+            footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.about ?? null,
         });
     }

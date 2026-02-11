@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const contact_model_1 = require("../../models/contact/contact.model");
 const home_model_1 = require("../../models/home/home.model");
+const footer_model_1 = require("../../models/footer/footer.model");
+const seo_model_1 = require("../../models/seo/seo.model");
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
 class ContactServices {
@@ -21,18 +23,30 @@ class ContactServices {
         return (0, format_services_1.default)(200, "Contact fetched successfully", contactBase);
     }
     async getContactAll(lang) {
-        const [contact, home] = await Promise.all([
+        const seoProjection = {
+            [`${lang}.contact`]: 1,
+            _id: 0,
+        };
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [contact, home, seo, footer] = await Promise.all([
             this.contactModel.findOne().select(lang).lean(),
             home_model_1.HomeModel.findOne().select(`${lang}.locations`).lean(),
+            seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
+            footer_model_1.FooterModel.findOne().select(footerProjection).lean(),
         ]);
         const contactBase = contact?.[lang];
         if (!contactBase) {
             throw new error_services_1.ServerError("Contact not found", 404);
         }
-        const locations = home?.[lang]?.locations ?? [];
+        const locations = home?.[lang]?.locations ?? null;
         return (0, format_services_1.default)(200, "Contact fetched successfully", {
             ...contactBase,
             locations,
+            footer: footer?.[lang] ?? null,
+            seo: seo?.[lang]?.contact ?? null,
         });
     }
     async patchContact(lang, contact) {

@@ -15,6 +15,7 @@ floorRoutes.get("/services", floor_controllers_1.getFloorServicesController);
 floorRoutes.get("/grounds", floor_controllers_1.getFloorGroundsController);
 floorRoutes.get("/floors-slider", floor_controllers_1.getFloorSliderController);
 floorRoutes.get("/options", floor_controllers_1.getFloorOptionsController);
+floorRoutes.get("/all", floor_controllers_1.getFloorAllController);
 floorRoutes.patch("/header", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(floor_validation_schemas_1.floorHeaderSchema), floor_controllers_1.updateFloorHeaderController);
 floorRoutes.patch("/hero", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(floor_validation_schemas_1.floorHeroSchema), floor_controllers_1.updateFloorHeroController);
 floorRoutes.patch("/features", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(floor_validation_schemas_1.floorFeaturesSchema), floor_controllers_1.updateFloorFeaturesController);

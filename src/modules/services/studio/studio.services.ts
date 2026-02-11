@@ -2,6 +2,7 @@ import { Model } from "mongoose";
 import { StudioModel, IStudioModel } from "../../models/studio/studio.model";
 import { IStudio, IStudioAbout, IStudioHero, IStudioPartners, IStudioWhyUs } from "../../models/studio/types/model.types";
 import { SeoModel } from "../../models/seo/seo.model";
+import { FooterModel } from "../../models/footer/footer.model";
 import { ISeo } from "../../models/seo/types/model.types";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
@@ -59,9 +60,14 @@ class StudioServices {
             [`${lang}.studio`]: 1,
             _id: 0,
         };
-        const [studio, seo] = await Promise.all([
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [studio, seo, footer] = await Promise.all([
             this.studioModel.findOne().select(projection).lean<IStudio | null>(),
             SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
+            FooterModel.findOne().select(footerProjection).lean(),
         ]);
         const studioData = studio?.[lang];
         if (!studioData) {
@@ -69,6 +75,7 @@ class StudioServices {
         }
         return responseFormatter(200, "Studio fetched successfully", {
             ...studioData,
+            footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.studio ?? null,
         });
     }

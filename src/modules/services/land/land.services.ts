@@ -1,5 +1,11 @@
 import { Model } from "mongoose";
 import { LandModel, ILandModel } from "../../models/land/land.model";
+import { HomeModel } from "../../models/home/home.model";
+import { IHome } from "../../models/home/types/model.types";
+import { FooterModel } from "../../models/footer/footer.model";
+import { IFooter } from "../../models/footer/types/model.types";
+import { SeoModel } from "../../models/seo/seo.model";
+import { ISeo } from "../../models/seo/types/model.types";
 import { ILand, ILandBase, ILandHero, IDiscoverFloors, IFloor, IServices, IServiceBirthDayParty, IServiceMembershipPackages, IServiceSchoolTripsAndNursery, IServiceWalkin } from "../../models/land/types/model.types";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
@@ -7,6 +13,19 @@ import responseFormatter from "../../../services/format.services";
 class LandServices {
     constructor(private readonly landModel: Model<ILandModel>) {
         this.landModel = landModel;
+    }
+
+    private stripTimestamps<T>(value: T): T {
+        if (Array.isArray(value)) {
+            return value.map((item) => this.stripTimestamps(item)) as T;
+        }
+        if (value && typeof value === "object") {
+            const entries = Object.entries(value as Record<string, unknown>)
+                .filter(([key]) => key !== "createdAt" && key !== "updatedAt" && key !== "__v")
+                .map(([key, entry]) => [key, this.stripTimestamps(entry)]);
+            return Object.fromEntries(entries) as T;
+        }
+        return value;
     }
 
     private async getSection<T>(lang: "ar" | "en", path: string, notFoundMessage: string, successMessage: string) {
@@ -131,6 +150,24 @@ class LandServices {
         return this.updateSection<IServiceBirthDayParty>(lang, "services.birthDayParty", payload, "Land birthday service not found", "Land birthday service updated successfully");
     }
 
+    async updateLandServicesBirthdayPrinceVisibility(lang: "ar" | "en", payload: { hidden: boolean }) {
+        const updatedLand = await this.landModel
+            .findOneAndUpdate(
+                {},
+                { $set: { [`${lang}.services.birthDayParty.packages.prince.hidden`]: payload.hidden } },
+                { new: true, runValidators: true, upsert: true, setDefaultsOnInsert: false }
+            )
+            .select(`${lang}.services.birthDayParty`)
+            .lean<ILand | null>();
+
+        const birthDayParty = updatedLand?.[lang]?.services?.birthDayParty;
+        if (!birthDayParty) {
+            throw new ServerError("Land birthday service not found", 404);
+        }
+
+        return responseFormatter(200, "Land birthday prince visibility updated successfully", birthDayParty);
+    }
+
     async getLandServicesMembership(lang: "ar" | "en") {
         return this.getSection<IServiceMembershipPackages>(lang, "services.membershipPackages", "Land membership service not found", "Land membership service fetched successfully");
     }
@@ -153,6 +190,46 @@ class LandServices {
 
     async updateLandServicesWalkin(lang: "ar" | "en", payload: IServiceWalkin) {
         return this.updateSection<IServiceWalkin>(lang, "services.walkin", payload, "Land walkin not found", "Land walkin updated successfully");
+    }
+
+    async getLandAll(lang: "ar" | "en") {
+        const projection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const seoProjection = {
+            [`${lang}.land`]: 1,
+            _id: 0,
+        };
+        const testimonialsProjection = {
+            [`${lang}.testimonials.cards`]: 1,
+            _id: 0,
+        };
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [land, seo, home, footer] = await Promise.all([
+            this.landModel.findOne().select(projection).lean<ILand | null>(),
+            SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
+            HomeModel.findOne().select(testimonialsProjection).lean<IHome | null>(),
+            FooterModel.findOne().select(footerProjection).lean<IFooter | null>(),
+        ]);
+        const landData = land?.[lang];
+        if (!landData) {
+            throw new ServerError("Land not found", 404);
+        }
+        const testimonialsCards = home?.[lang]?.testimonials?.cards ?? [];
+        const responseData = this.stripTimestamps({
+            ...landData,
+            testimonials: {
+                title: landData.testimonialsTitle ?? [],
+                cards: testimonialsCards,
+            },
+            footer: footer?.[lang] ?? null,
+            seo: seo?.[lang]?.land ?? null,
+        });
+        return responseFormatter(200, "Land fetched successfully", responseData);
     }
 }
 

@@ -15,6 +15,7 @@ import {
     getFloorSliderController,
     getFloorOptionsController,
     updateFloorSliderController,
+    getFloorAllController,
 } from "../../controllers/floor/floor.controllers";
 import { languageMiddleware } from "../../../shared/middlewares/language.middleware";
 import { adminAuth } from "../../../shared/middlewares/admin-auth.middleware";
@@ -40,6 +41,7 @@ floorRoutes.get("/services", getFloorServicesController);
 floorRoutes.get("/grounds", getFloorGroundsController);
 floorRoutes.get("/floors-slider", getFloorSliderController);
 floorRoutes.get("/options", getFloorOptionsController);
+floorRoutes.get("/all", getFloorAllController);
 
 floorRoutes.patch("/header", adminAuth, zodValidator(floorHeaderSchema), updateFloorHeaderController);
 floorRoutes.patch("/hero", adminAuth, zodValidator(floorHeroSchema), updateFloorHeroController);

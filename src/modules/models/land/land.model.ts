@@ -140,36 +140,62 @@ const DiscoverSchema = new mongoose.Schema({
     },
 }, { _id: false, timestamps: true });
 
-const ServiceBirthDayPartyPackagesSchema = new mongoose.Schema({
-    oldPrice: {
+const ServiceBirthDayPartyPriceItemSchema = new mongoose.Schema({
+    price: {
         type: Number,
         required: true,
     },
+    per: {
+        type: String,
+        required: true,
+        minlength: 1,
+    }
+}, { _id: false, timestamps: true });
+
+const ServiceBirthDayPartyPriceSchema = new mongoose.Schema({
+    weekdays: {
+        type: ServiceBirthDayPartyPriceItemSchema,
+        required: false,
+    },
+    weekends: {
+        type: ServiceBirthDayPartyPriceItemSchema,
+        required: false,
+    },
+}, { _id: false, timestamps: true });
+
+const ServiceBirthDayPartyPackagesSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true,
+        minlength: 3,
+    },
+    oldPrice: {
+        type: Number,
+        required: false,
+    },
     price: {
-        weekdays: {
-            type: Number,
-            required: true,
-        },
-        weekends: {
-            type: Number,
-            required: true,
+        type: ServiceBirthDayPartyPriceSchema,
+        required: true,
+        validate: {
+            validator: (value?: { weekdays?: unknown; weekends?: unknown }) =>
+                !!(value?.weekdays || value?.weekends),
+            message: "At least one of weekdays or weekends price is required."
         }
     },
     description: {
         type: mongoose.Schema.Types.Array,
         required: true,
         validate: {
-            validator: (v: string[]) => v.length >= 1 && v.length <= 3,
-            message: "Description must have at least 1 item and at most 3 items."
+            validator: (v: string[]) => v.length >= 1,
+            message: "Description must have at least 1 item."
         }
     },
     highlights: {
         type: mongoose.Schema.Types.Array,
         required: true,
-        minlength: 3,
         validate: {
-            validator: (v: string[]) => v.length >= 3,
-            message: "Highlights must have at least 3 items."
+            validator: (v: string[]) => v.length >= 1,
+            message: "Highlights must have at least 1 item."
         }
     }
 }, { _id: false, timestamps: true });
@@ -210,45 +236,33 @@ const ServicesBirthDayPartySchema = new mongoose.Schema({
         required: false,
     },
     packages: {
-        bronze: ServiceBirthDayPartyPackagesSchema,
-        gold: ServiceBirthDayPartyPackagesSchema,
-        diamond: {
-            oldPrice: {
-                type: Number,
-                required: true,
-            },
-            price: {
-                type: Number,
-                required: true,
-            },
-            description: {
-                type: mongoose.Schema.Types.Array,
-                required: true,
-                validate: {
-                    validator: (v: string[]) => v.length >= 1 && v.length <= 3,
-                    message: "Description must have at least 1 item and at most 3 items."
-                }
-            },
-            highlights: {
-                type: mongoose.Schema.Types.Array,
-                required: true,
-                minlength: 3,
-                validate: {
-                    validator: (v: string[]) => v.length >= 3,
-                    message: "Highlights must have at least 3 items."
-                }
+        list: {
+            type: [ServiceBirthDayPartyPackagesSchema],
+            required: true,
+            validate: {
+                validator: (v: unknown[]) => Array.isArray(v) && v.length >= 1,
+                message: "Packages must have at least 1 item."
             }
         },
         prince: {
+            hidden: {
+                type: Boolean,
+                required: true,
+                default: false,
+            },
             title: {
                 type: String,
-                required: true,
+                required: function (this: { hidden?: boolean }): boolean {
+                    return !this.hidden;
+                },
                 minlength: 3,
 
             },
             description: {
                 type: String,
-                required: true,
+                required: function (this: { hidden?: boolean }): boolean {
+                    return !this.hidden;
+                },
                 minlength: 10
             }
         }
@@ -381,16 +395,16 @@ const ServicesMembershipPackagesSchema = new mongoose.Schema({
                 type: [ServicesMembershipPackagesCardSchema],
                 required: true,
                 validate: {
-                    validator: (v: unknown[]) => Array.isArray(v) && v.length >= 3 && v.length <= 6,
-                    message: "Each year must include between 3 and 6 plans."
+                    validator: (v: unknown[]) => Array.isArray(v) && v.length >= 1,
+                    message: "Each year must include at least 1 plan."
                 }
             },
             6: {
                 type: [ServicesMembershipPackagesCardSchema],
                 required: true,
                 validate: {
-                    validator: (v: unknown[]) => Array.isArray(v) && v.length >= 3 && v.length <= 6,
-                    message: "Each year must include between 3 and 6 plans."
+                    validator: (v: unknown[]) => Array.isArray(v) && v.length >= 1,
+                    message: "Each year must include at least 1 plan."
                 }
             }
         }

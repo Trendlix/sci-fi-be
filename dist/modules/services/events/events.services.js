@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const events_model_1 = require("../../models/events/events.model");
 const seo_model_1 = require("../../models/seo/seo.model");
+const footer_model_1 = require("../../models/footer/footer.model");
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
 class EventServices {
@@ -108,9 +109,14 @@ class EventServices {
             [`${lang}.events`]: 1,
             _id: 0,
         };
-        const [event, seo] = await Promise.all([
+        const footerProjection = {
+            [lang]: 1,
+            _id: 0,
+        };
+        const [event, seo, footer] = await Promise.all([
             this.eventModel.findOne().select(projection).lean(),
             seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
+            footer_model_1.FooterModel.findOne().select(footerProjection).lean(),
         ]);
         const eventData = event?.[lang];
         if (!eventData) {
@@ -118,6 +124,7 @@ class EventServices {
         }
         return (0, format_services_1.default)(200, "Event fetched successfully", {
             ...eventData,
+            footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.events ?? null,
         });
     }
