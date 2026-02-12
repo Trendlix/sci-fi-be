@@ -176,6 +176,26 @@ export const updateFloorSliderController = CatchAsyncError(async (req: Request, 
     res.status(response.status).json(response);
 });
 
+export const getFloorSeoController = CatchAsyncError(async (req: Request, res: Response) => {
+    const { floorId, floorIndex, floorTitle } = resolveFloorLookup(
+        req.query.floorId as string | undefined,
+        req.query.floorIndex as string | undefined,
+        req.query.floorTitle as string | undefined
+    );
+    const response = await floorServices.getFloorSeo(req.lang ?? "en", floorId, floorIndex, floorTitle);
+    res.status(response.status).json(response);
+});
+
+export const updateFloorSeoController = CatchAsyncError(async (req: Request, res: Response) => {
+    const { floorId, floorIndex, floorTitle } = resolveFloorLookup(
+        req.query.floorId as string | undefined,
+        req.query.floorIndex as string | undefined,
+        req.query.floorTitle as string | undefined
+    );
+    const response = await floorServices.updateFloorSeo(req.lang ?? "en", req.body, floorId, floorIndex, floorTitle);
+    res.status(response.status).json(response);
+});
+
 export const getFloorAllController = CatchAsyncError(async (req: Request, res: Response) => {
     const { floorId, floorIndex, floorTitle } = resolveFloorLookup(
         req.query.floorId as string | undefined,

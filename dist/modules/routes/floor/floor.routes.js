@@ -14,6 +14,7 @@ floorRoutes.get("/features", floor_controllers_1.getFloorFeaturesController);
 floorRoutes.get("/services", floor_controllers_1.getFloorServicesController);
 floorRoutes.get("/grounds", floor_controllers_1.getFloorGroundsController);
 floorRoutes.get("/floors-slider", floor_controllers_1.getFloorSliderController);
+floorRoutes.get("/seo", floor_controllers_1.getFloorSeoController);
 floorRoutes.get("/options", floor_controllers_1.getFloorOptionsController);
 floorRoutes.get("/all", floor_controllers_1.getFloorAllController);
 floorRoutes.patch("/header", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(floor_validation_schemas_1.floorHeaderSchema), floor_controllers_1.updateFloorHeaderController);
@@ -24,4 +25,5 @@ floorRoutes.patch("/services/hidden", admin_auth_middleware_1.adminAuth, (0, zod
 floorRoutes.patch("/grounds", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(floor_validation_schemas_1.floorGroundsSchema), floor_controllers_1.updateFloorGroundsController);
 floorRoutes.patch("/grounds/hidden", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(floor_validation_schemas_1.floorHiddenSchema), floor_controllers_1.updateFloorGroundsHiddenController);
 floorRoutes.patch("/floors-slider", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(floor_validation_schemas_1.floorSliderSchema), floor_controllers_1.updateFloorSliderController);
+floorRoutes.patch("/seo", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(floor_validation_schemas_1.floorSeoSchema), floor_controllers_1.updateFloorSeoController);
 exports.default = floorRoutes;

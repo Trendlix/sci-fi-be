@@ -57,7 +57,7 @@ const HeroSchema = new mongoose.Schema({
 const FeaturesSchema = new mongoose.Schema({
     cards: {
         type: [
-                {
+            {
                 file: {
                     url: {
                         type: String,
@@ -90,7 +90,7 @@ const FeaturesSchema = new mongoose.Schema({
                 },
             }
         ],
-                validate: {
+        validate: {
             validator: (v: unknown[]) => v.length >= 1,
             message: "Cards must have at least 1 item.",
         },
@@ -214,7 +214,7 @@ const GroundsSchema = new mongoose.Schema({
         validate: {
             validator: (v: unknown[]) => v.length >= 1,
             message: "Cards must have at least 1 item.",
-                },
+        },
     }
 }, { _id: false, timestamps: true });
 
@@ -269,6 +269,25 @@ const FloorsSliderSchema = new mongoose.Schema({
     }
 }, { _id: false, timestamps: true });
 
+const SeoBaseSchema = new mongoose.Schema({
+    filesAlt: {
+        type: String,
+        required: true,
+    },
+    title: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    keywords: {
+        type: [String],
+        required: true,
+    },
+}, { _id: false, timestamps: true });
+
 const FloorsBaseSchema = new mongoose.Schema({
     header: HeaderSchema,
     hero: HeroSchema,
@@ -276,6 +295,10 @@ const FloorsBaseSchema = new mongoose.Schema({
     services: ServicesSchema,
     grounds: GroundsSchema,
     floorsSlider: FloorsSliderSchema,
+    seo: {
+        type: SeoBaseSchema,
+        required: true,
+    },
 }, { _id: false, timestamps: true });
 
 const FloorsSchema = new mongoose.Schema({

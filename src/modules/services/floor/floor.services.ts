@@ -1,9 +1,11 @@
 import { Model } from "mongoose";
 import { FloorModel, IFloorModel } from "../../models/floor/floor.model";
+import { LandModel } from "../../models/land/land.model";
 import { FooterModel } from "../../models/footer/footer.model";
 import { SeoModel } from "../../models/seo/seo.model";
 import { ISeo } from "../../models/seo/types/model.types";
-import { IFloor, IFloorFeatures, IFloorGrounds, IFloorHeader, IFloorHero, IFloorServices, IFloorSlider } from "../../models/floor/types/model.types";
+import { IFloor, IFloorFeatures, IFloorGrounds, IFloorHeader, IFloorHero, IFloorServices, IFloorSlider, IFloorSeo } from "../../models/floor/types/model.types";
+import type { ILand } from "../../models/land/types/model.types";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
 
@@ -14,7 +16,7 @@ class FloorServices {
 
     private async getSection<T>(
         lang: "ar" | "en",
-        key: "header" | "hero" | "features" | "services" | "grounds" | "floorsSlider",
+        key: "header" | "hero" | "features" | "services" | "grounds" | "floorsSlider" | "seo",
         notFoundMessage: string,
         successMessage: string,
         floorId?: string,
@@ -50,6 +52,7 @@ class FloorServices {
                     services: { hidden: false, description: "", cards: [] },
                     grounds: { hidden: false, cards: [] },
                     floorsSlider: { description: "", cards: [] },
+                    seo: { filesAlt: "", title: "", description: "", keywords: [] },
                 };
                 return responseFormatter(200, "Floor section initialized", defaults[key] as T);
             }
@@ -66,9 +69,19 @@ class FloorServices {
         return new RegExp(`^${pattern}$`, "i");
     }
 
+    private toFloorSlug(value: string) {
+        const trimmed = value?.trim();
+        if (!trimmed) return "";
+        return trimmed
+            .toLowerCase()
+            .replace(/['"]/g, "")
+            .replace(/[^a-z0-9\u0600-\u06FF]+/gi, "-")
+            .replace(/^-+|-+$/g, "");
+    }
+
     private async updateSection<T>(
         lang: "ar" | "en",
-        key: "header" | "hero" | "features" | "services" | "grounds" | "floorsSlider",
+        key: "header" | "hero" | "features" | "services" | "grounds" | "floorsSlider" | "seo",
         payload: T,
         notFoundMessage: string,
         successMessage: string,
@@ -314,8 +327,18 @@ class FloorServices {
 
     async getFloorAll(lang: "ar" | "en", floorId?: string, floorIndex?: number, floorTitle?: string) {
         const titleRegex = floorTitle?.trim() ? this.buildTitleRegex(floorTitle) : null;
+        const titleFields = Array.from(
+            new Set([`landFloorTitle.${lang}`, "landFloorTitle.en", "landFloorTitle.ar"])
+        );
+        const langExists = { [lang]: { $exists: true } };
         const floorIndexCandidates = typeof floorIndex === "number"
-            ? [floorIndex, ...(floorIndex > 0 ? [floorIndex - 1] : [])]
+            ? Array.from(
+                new Set([
+                    floorIndex,
+                    ...(floorIndex > 0 ? [floorIndex - 1] : []),
+                    floorIndex + 1
+                ])
+            ).filter((value) => value >= 0)
             : [];
         const projection = {
             [`${lang}`]: 1,
@@ -331,7 +354,7 @@ class FloorServices {
             [lang]: 1,
             _id: 0,
         };
-        const [floor, seo, footer] = await Promise.all([
+        let [floor, seo, footer] = await Promise.all([
             (async () => {
                 if (floorId) {
                     return this.floorModel.findOne({ _id: floorId }).select(projection).lean<IFloor | null>();
@@ -339,15 +362,19 @@ class FloorServices {
                 const queries: Record<string, unknown>[] = [];
                 if (floorIndexCandidates.length) {
                     floorIndexCandidates.forEach((index) => {
-                        const baseQuery: Record<string, unknown> = { landFloorIndex: index };
+                        const baseQuery: Record<string, unknown> = { landFloorIndex: index, ...langExists };
                         if (titleRegex) {
-                            queries.push({ ...baseQuery, [`landFloorTitle.${lang}`]: titleRegex });
+                            titleFields.forEach((field) => {
+                                queries.push({ ...baseQuery, [field]: titleRegex });
+                            });
                         }
                         queries.push(baseQuery);
                     });
                 }
                 if (titleRegex) {
-                    queries.push({ [`landFloorTitle.${lang}`]: titleRegex });
+                    titleFields.forEach((field) => {
+                        queries.push({ [field]: titleRegex, ...langExists });
+                    });
                 }
                 for (const query of queries) {
                     const match = await this.floorModel.findOne(query).select(projection).lean<IFloor | null>();
@@ -358,6 +385,43 @@ class FloorServices {
             SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
             FooterModel.findOne().select(footerProjection).lean(),
         ]);
+        if (!floor || !floor?.[lang]) {
+            if (floor && !floor?.[lang]) {
+                floor = null;
+            }
+            const land = await LandModel.findOne()
+                .select(`${lang}.floors`)
+                .lean<ILand | null>();
+            const landFloors = land?.[lang]?.floors ?? [];
+            const titleSlug = floorTitle ? this.toFloorSlug(floorTitle) : "";
+            let fallbackFloorId: string | undefined;
+
+            if (floorIndexCandidates.length) {
+                for (const index of floorIndexCandidates) {
+                    const candidate = landFloors[index]?.floor;
+                    if (candidate) {
+                        fallbackFloorId = String(candidate);
+                        break;
+                    }
+                }
+            }
+
+            if (!fallbackFloorId && titleSlug) {
+                const matched = landFloors.find(
+                    (landFloor) => this.toFloorSlug(landFloor.title ?? "") === titleSlug
+                );
+                if (matched?.floor) {
+                    fallbackFloorId = String(matched.floor);
+                }
+            }
+
+            if (fallbackFloorId) {
+                floor = await this.floorModel
+                    .findOne({ _id: fallbackFloorId, ...langExists })
+                    .select(projection)
+                    .lean<IFloor | null>();
+            }
+        }
         const floorData = floor?.[lang];
         if (!floorData) {
             throw new ServerError("Floor not found", 404);
@@ -365,8 +429,33 @@ class FloorServices {
         return responseFormatter(200, "Floor fetched successfully", {
             ...floorData,
             footer: footer?.[lang] ?? null,
-            seo: seo?.[lang]?.land ?? null,
+            seo: floorData.seo ?? seo?.[lang]?.land ?? null,
         });
+    }
+
+    async getFloorSeo(lang: "ar" | "en", floorId?: string, floorIndex?: number, floorTitle?: string) {
+        return this.getSection<IFloorSeo>(
+            lang,
+            "seo",
+            "Floor seo not found",
+            "Floor seo fetched successfully",
+            floorId,
+            floorIndex,
+            floorTitle
+        );
+    }
+
+    async updateFloorSeo(lang: "ar" | "en", payload: IFloorSeo, floorId?: string, floorIndex?: number, floorTitle?: string) {
+        return this.updateSection<IFloorSeo>(
+            lang,
+            "seo",
+            payload,
+            "Floor seo not found",
+            "Floor seo updated successfully",
+            floorId,
+            floorIndex,
+            floorTitle
+        );
     }
 }
 

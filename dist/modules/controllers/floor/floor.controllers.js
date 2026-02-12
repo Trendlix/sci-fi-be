@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFloorAllController = exports.updateFloorSliderController = exports.getFloorOptionsController = exports.getFloorSliderController = exports.updateFloorGroundsHiddenController = exports.updateFloorGroundsController = exports.getFloorGroundsController = exports.updateFloorServicesHiddenController = exports.updateFloorServicesController = exports.getFloorServicesController = exports.updateFloorFeaturesController = exports.getFloorFeaturesController = exports.updateFloorHeroController = exports.getFloorHeroController = exports.updateFloorHeaderController = exports.getFloorHeaderController = void 0;
+exports.getFloorAllController = exports.updateFloorSeoController = exports.getFloorSeoController = exports.updateFloorSliderController = exports.getFloorOptionsController = exports.getFloorSliderController = exports.updateFloorGroundsHiddenController = exports.updateFloorGroundsController = exports.getFloorGroundsController = exports.updateFloorServicesHiddenController = exports.updateFloorServicesController = exports.getFloorServicesController = exports.updateFloorFeaturesController = exports.getFloorFeaturesController = exports.updateFloorHeroController = exports.getFloorHeroController = exports.updateFloorHeaderController = exports.getFloorHeaderController = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const error_services_1 = __importStar(require("../../../services/error.services"));
 const floor_services_1 = __importDefault(require("../../services/floor/floor.services"));
@@ -127,6 +127,16 @@ exports.getFloorOptionsController = (0, error_services_1.default)(async (req, re
 exports.updateFloorSliderController = (0, error_services_1.default)(async (req, res) => {
     const { floorId, floorIndex, floorTitle } = resolveFloorLookup(req.query.floorId, req.query.floorIndex, req.query.floorTitle);
     const response = await floor_services_1.default.updateFloorSlider(req.lang ?? "en", req.body, floorId, floorIndex, floorTitle);
+    res.status(response.status).json(response);
+});
+exports.getFloorSeoController = (0, error_services_1.default)(async (req, res) => {
+    const { floorId, floorIndex, floorTitle } = resolveFloorLookup(req.query.floorId, req.query.floorIndex, req.query.floorTitle);
+    const response = await floor_services_1.default.getFloorSeo(req.lang ?? "en", floorId, floorIndex, floorTitle);
+    res.status(response.status).json(response);
+});
+exports.updateFloorSeoController = (0, error_services_1.default)(async (req, res) => {
+    const { floorId, floorIndex, floorTitle } = resolveFloorLookup(req.query.floorId, req.query.floorIndex, req.query.floorTitle);
+    const response = await floor_services_1.default.updateFloorSeo(req.lang ?? "en", req.body, floorId, floorIndex, floorTitle);
     res.status(response.status).json(response);
 });
 exports.getFloorAllController = (0, error_services_1.default)(async (req, res) => {

@@ -65,6 +65,13 @@ export interface IFloorSlider {
     cards: IFloorSliderCard[];
 }
 
+export interface IFloorSeo {
+    filesAlt: string;
+    title: string;
+    description: string;
+    keywords: string[];
+}
+
 export interface IFloorBase {
     header: IFloorHeader;
     hero: IFloorHero;
@@ -72,6 +79,7 @@ export interface IFloorBase {
     services: IFloorServices;
     grounds: IFloorGrounds;
     floorsSlider: IFloorSlider;
+    seo: IFloorSeo;
 }
 
 export interface IFloor {

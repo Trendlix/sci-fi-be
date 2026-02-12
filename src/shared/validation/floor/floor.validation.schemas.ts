@@ -71,3 +71,10 @@ export const floorSliderSchema = z.object({
     cards: z.array(sliderCardSchema).min(1),
 });
 
+export const floorSeoSchema = z.object({
+    filesAlt: z.string().min(1),
+    title: z.string().min(3),
+    description: z.string().min(10),
+    keywords: z.array(z.string().min(1)).min(1),
+});
+

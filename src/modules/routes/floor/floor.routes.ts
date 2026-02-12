@@ -15,6 +15,8 @@ import {
     getFloorSliderController,
     getFloorOptionsController,
     updateFloorSliderController,
+    getFloorSeoController,
+    updateFloorSeoController,
     getFloorAllController,
 } from "../../controllers/floor/floor.controllers";
 import { languageMiddleware } from "../../../shared/middlewares/language.middleware";
@@ -28,6 +30,7 @@ import {
     floorGroundsSchema,
     floorSliderSchema,
     floorHiddenSchema,
+    floorSeoSchema,
 } from "../../../shared/validation/floor/floor.validation.schemas";
 
 const floorRoutes = Router();
@@ -40,6 +43,7 @@ floorRoutes.get("/features", getFloorFeaturesController);
 floorRoutes.get("/services", getFloorServicesController);
 floorRoutes.get("/grounds", getFloorGroundsController);
 floorRoutes.get("/floors-slider", getFloorSliderController);
+floorRoutes.get("/seo", getFloorSeoController);
 floorRoutes.get("/options", getFloorOptionsController);
 floorRoutes.get("/all", getFloorAllController);
 
@@ -51,6 +55,7 @@ floorRoutes.patch("/services/hidden", adminAuth, zodValidator(floorHiddenSchema)
 floorRoutes.patch("/grounds", adminAuth, zodValidator(floorGroundsSchema), updateFloorGroundsController);
 floorRoutes.patch("/grounds/hidden", adminAuth, zodValidator(floorHiddenSchema), updateFloorGroundsHiddenController);
 floorRoutes.patch("/floors-slider", adminAuth, zodValidator(floorSliderSchema), updateFloorSliderController);
+floorRoutes.patch("/seo", adminAuth, zodValidator(floorSeoSchema), updateFloorSeoController);
 
 export default floorRoutes;
 

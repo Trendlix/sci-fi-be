@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import v1Router from "./routers/v1.router";
+import { getSitemapController } from "./modules/controllers/sitemap/sitemap.controllers";
 import responseFormatter from "./services/format.services";
 import { ServerError } from "./services/error.services";
 
@@ -12,6 +13,8 @@ app.use(express.json());
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "TypeScript + Express is working 🚀" });
 });
+
+app.get("/sitemap.xml", getSitemapController);
 
 app.use("/api/v1", v1Router);
 

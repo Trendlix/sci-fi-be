@@ -14,6 +14,7 @@ const floor_routes_1 = __importDefault(require("../modules/routes/floor/floor.ro
 const events_routes_1 = __importDefault(require("../modules/routes/events/events.routes"));
 const seo_routes_1 = __importDefault(require("../modules/routes/seo/seo.routes"));
 const footer_routes_1 = __importDefault(require("../modules/routes/footer/footer.routes"));
+const sitemap_routes_1 = __importDefault(require("../modules/routes/sitemap/sitemap.routes"));
 const v1Router = (0, express_1.Router)();
 v1Router.use("/admin", admin_routes_1.default);
 v1Router.use("/home", home_routes_1.default);
@@ -25,4 +26,5 @@ v1Router.use("/floor", floor_routes_1.default);
 v1Router.use("/events", events_routes_1.default);
 v1Router.use("/seo", seo_routes_1.default);
 v1Router.use("/footer", footer_routes_1.default);
+v1Router.use("/sitemap", sitemap_routes_1.default);
 exports.default = v1Router;

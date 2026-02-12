@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.floorSliderSchema = exports.floorHiddenSchema = exports.floorGroundsSchema = exports.floorServicesSchema = exports.floorFeaturesSchema = exports.floorHeroSchema = exports.floorHeaderSchema = void 0;
+exports.floorSeoSchema = exports.floorSliderSchema = exports.floorHiddenSchema = exports.floorGroundsSchema = exports.floorServicesSchema = exports.floorFeaturesSchema = exports.floorHeroSchema = exports.floorHeaderSchema = void 0;
 const z = __importStar(require("zod"));
 const fileSchema = z.object({
     url: z.string().min(1),
@@ -93,4 +93,10 @@ exports.floorSliderSchema = z.object({
     title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
     cards: z.array(sliderCardSchema).min(1),
+});
+exports.floorSeoSchema = z.object({
+    filesAlt: z.string().min(1),
+    title: z.string().min(3),
+    description: z.string().min(10),
+    keywords: z.array(z.string().min(1)).min(1),
 });

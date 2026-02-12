@@ -266,6 +266,24 @@ const FloorsSliderSchema = new mongoose_1.default.Schema({
         },
     }
 }, { _id: false, timestamps: true });
+const SeoBaseSchema = new mongoose_1.default.Schema({
+    filesAlt: {
+        type: String,
+        required: true,
+    },
+    title: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    keywords: {
+        type: [String],
+        required: true,
+    },
+}, { _id: false, timestamps: true });
 const FloorsBaseSchema = new mongoose_1.default.Schema({
     header: HeaderSchema,
     hero: HeroSchema,
@@ -273,6 +291,10 @@ const FloorsBaseSchema = new mongoose_1.default.Schema({
     services: ServicesSchema,
     grounds: GroundsSchema,
     floorsSlider: FloorsSliderSchema,
+    seo: {
+        type: SeoBaseSchema,
+        required: true,
+    },
 }, { _id: false, timestamps: true });
 const FloorsSchema = new mongoose_1.default.Schema({
     ar: {
