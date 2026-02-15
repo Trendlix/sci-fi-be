@@ -3,6 +3,8 @@ import { HomeModel, IHomeModel } from "../../models/home/home.model";
 import { FooterModel } from "../../models/footer/footer.model";
 import { IFooter } from "../../models/footer/types/model.types";
 import { SeoModel, ISeoModel } from "../../models/seo/seo.model";
+import BrandModel from "../../models/brand/brand.model";
+import { IBrand } from "../../models/brand/types/model.types";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
 import { IAbout, IHero, IHorizontal, ILocationSection, ITestimonial, IHome, IHomeBase } from "../../models/home/types/model.types";
@@ -204,10 +206,11 @@ class HomeServices {
             [lang]: 1,
             _id: 0,
         };
-        const [home, seo, footer] = await Promise.all([
+        const [home, seo, footer, brand] = await Promise.all([
             this.homeModel.findOne().select(projection).lean<IHome | null>(),
             SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
             FooterModel.findOne().select(footerProjection).lean<IFooter | null>(),
+            BrandModel.findOne().lean<IBrand | null>(),
         ]);
         const homeData = home?.[lang];
         if (!homeData) {
@@ -217,6 +220,7 @@ class HomeServices {
             ...homeData,
             footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.home ?? null,
+            brand: brand ?? null,
         });
     }
 }

@@ -5,6 +5,8 @@ import { IHome } from "../../models/home/types/model.types";
 import { FooterModel } from "../../models/footer/footer.model";
 import { IFooter } from "../../models/footer/types/model.types";
 import { SeoModel } from "../../models/seo/seo.model";
+import BrandModel from "../../models/brand/brand.model";
+import { IBrand } from "../../models/brand/types/model.types";
 import { ISeo } from "../../models/seo/types/model.types";
 import { ILand, ILandBase, ILandHero, IDiscoverFloors, IFloor, IServices, IServiceBirthDayParty, IServiceMembershipPackages, IServiceSchoolTripsAndNursery, IServiceWalkin } from "../../models/land/types/model.types";
 import { ServerError } from "../../../services/error.services";
@@ -209,11 +211,12 @@ class LandServices {
             [lang]: 1,
             _id: 0,
         };
-        const [land, seo, home, footer] = await Promise.all([
+        const [land, seo, home, footer, brand] = await Promise.all([
             this.landModel.findOne().select(projection).lean<ILand | null>(),
             SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
             HomeModel.findOne().select(testimonialsProjection).lean<IHome | null>(),
             FooterModel.findOne().select(footerProjection).lean<IFooter | null>(),
+            BrandModel.findOne().lean<IBrand | null>(),
         ]);
         const landData = land?.[lang];
         if (!landData) {
@@ -228,6 +231,7 @@ class LandServices {
             },
             footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.land ?? null,
+            brand: brand ?? null,
         });
         return responseFormatter(200, "Land fetched successfully", responseData);
     }

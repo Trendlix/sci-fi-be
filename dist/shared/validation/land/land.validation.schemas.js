@@ -158,16 +158,10 @@ exports.landMembershipSchema = z.object({
         }),
     }),
 });
-const schoolNurseryHighlightSchema = z.object({
-    icon: z.string().min(1),
-    line: z.object({
-        title: z.string().min(3),
-        description: z.string().min(10),
-    }),
-});
 const schoolNurseryBaseSchema = z.object({
     description: z.string().min(10),
-    highlights: schoolNurseryHighlightSchema,
+    video: fileSchema.optional(),
+    catelog: fileSchema.optional(),
 });
 exports.landSchoolNurserySchema = z.object({
     schoolTrips: schoolNurseryBaseSchema,

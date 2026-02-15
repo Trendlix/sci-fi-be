@@ -3,6 +3,8 @@ import { StudioModel, IStudioModel } from "../../models/studio/studio.model";
 import { IStudio, IStudioAbout, IStudioHero, IStudioPartners, IStudioWhyUs } from "../../models/studio/types/model.types";
 import { SeoModel } from "../../models/seo/seo.model";
 import { FooterModel } from "../../models/footer/footer.model";
+import BrandModel from "../../models/brand/brand.model";
+import { IBrand } from "../../models/brand/types/model.types";
 import { ISeo } from "../../models/seo/types/model.types";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
@@ -64,10 +66,11 @@ class StudioServices {
             [lang]: 1,
             _id: 0,
         };
-        const [studio, seo, footer] = await Promise.all([
+        const [studio, seo, footer, brand] = await Promise.all([
             this.studioModel.findOne().select(projection).lean<IStudio | null>(),
             SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
             FooterModel.findOne().select(footerProjection).lean(),
+            BrandModel.findOne().lean<IBrand | null>(),
         ]);
         const studioData = studio?.[lang];
         if (!studioData) {
@@ -77,6 +80,7 @@ class StudioServices {
             ...studioData,
             footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.studio ?? null,
+            brand: brand ?? null,
         });
     }
 

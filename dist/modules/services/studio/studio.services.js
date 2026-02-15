@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const studio_model_1 = require("../../models/studio/studio.model");
 const seo_model_1 = require("../../models/seo/seo.model");
 const footer_model_1 = require("../../models/footer/footer.model");
+const brand_model_1 = __importDefault(require("../../models/brand/brand.model"));
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
 class StudioServices {
@@ -61,10 +62,11 @@ class StudioServices {
             [lang]: 1,
             _id: 0,
         };
-        const [studio, seo, footer] = await Promise.all([
+        const [studio, seo, footer, brand] = await Promise.all([
             this.studioModel.findOne().select(projection).lean(),
             seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
             footer_model_1.FooterModel.findOne().select(footerProjection).lean(),
+            brand_model_1.default.findOne().lean(),
         ]);
         const studioData = studio?.[lang];
         if (!studioData) {
@@ -74,6 +76,7 @@ class StudioServices {
             ...studioData,
             footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.studio ?? null,
+            brand: brand ?? null,
         });
     }
     async updateSection(lang, key, payload, notFoundMessage, successMessage) {

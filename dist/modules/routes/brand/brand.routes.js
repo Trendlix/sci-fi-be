@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const brand_controllers_1 = require("../../controllers/brand/brand.controllers");
+const admin_auth_middleware_1 = require("../../../shared/middlewares/admin-auth.middleware");
+const zod_util_1 = require("../../../shared/utils/zod.util");
+const brand_validation_schemas_1 = require("../../../shared/validation/brand/brand.validation.schemas");
+const brandRoutes = (0, express_1.Router)();
+brandRoutes.get("/", brand_controllers_1.getBrandController);
+brandRoutes.patch("/", admin_auth_middleware_1.adminAuth, (0, zod_util_1.zodValidator)(brand_validation_schemas_1.brandValidationSchema), brand_controllers_1.patchBrandController);
+exports.default = brandRoutes;

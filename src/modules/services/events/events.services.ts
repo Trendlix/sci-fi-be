@@ -4,6 +4,8 @@ import { IEvent, IEventBase } from "../../models/events/types/model.types";
 import { SeoModel } from "../../models/seo/seo.model";
 import { FooterModel } from "../../models/footer/footer.model";
 import { IFooter } from "../../models/footer/types/model.types";
+import BrandModel from "../../models/brand/brand.model";
+import { IBrand } from "../../models/brand/types/model.types";
 import { ISeo } from "../../models/seo/types/model.types";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
@@ -147,10 +149,11 @@ class EventServices {
             [lang]: 1,
             _id: 0,
         };
-        const [event, seo, footer] = await Promise.all([
+        const [event, seo, footer, brand] = await Promise.all([
             this.eventModel.findOne().select(projection).lean<IEvent | null>(),
             SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
             FooterModel.findOne().select(footerProjection).lean<IFooter | null>(),
+            BrandModel.findOne().lean<IBrand | null>(),
         ]);
         const eventData = event?.[lang];
         if (!eventData) {
@@ -160,9 +163,9 @@ class EventServices {
             ...eventData,
             footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.events ?? null,
+            brand: brand ?? null,
         });
     }
 }
 
 export default new EventServices(EventModel);
-

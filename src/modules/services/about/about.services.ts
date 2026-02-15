@@ -3,6 +3,8 @@ import { AboutModel, IAboutModel } from "../../models/about/about.model";
 import { FooterModel } from "../../models/footer/footer.model";
 import { IFooter } from "../../models/footer/types/model.types";
 import { SeoModel } from "../../models/seo/seo.model";
+import BrandModel from "../../models/brand/brand.model";
+import { IBrand } from "../../models/brand/types/model.types";
 import { IAbout, IAboutBase } from "../../models/about/types/model.types";
 import { ISeo } from "../../models/seo/types/model.types";
 import { ServerError } from "../../../services/error.services";
@@ -92,10 +94,11 @@ class AboutServices {
             [lang]: 1,
             _id: 0,
         };
-        const [about, seo, footer] = await Promise.all([
+        const [about, seo, footer, brand] = await Promise.all([
             this.aboutModel.findOne().select(projection).lean<IAbout | null>(),
             SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
             FooterModel.findOne().select(footerProjection).lean<IFooter | null>(),
+            BrandModel.findOne().lean<IBrand | null>(),
         ]);
         const aboutData = about?.[lang];
         if (!aboutData) {
@@ -105,6 +108,7 @@ class AboutServices {
             ...aboutData,
             footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.about ?? null,
+            brand: brand ?? null,
         });
     }
 

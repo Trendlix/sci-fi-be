@@ -7,6 +7,7 @@ const land_model_1 = require("../../models/land/land.model");
 const home_model_1 = require("../../models/home/home.model");
 const footer_model_1 = require("../../models/footer/footer.model");
 const seo_model_1 = require("../../models/seo/seo.model");
+const brand_model_1 = __importDefault(require("../../models/brand/brand.model"));
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
 class LandServices {
@@ -168,11 +169,12 @@ class LandServices {
             [lang]: 1,
             _id: 0,
         };
-        const [land, seo, home, footer] = await Promise.all([
+        const [land, seo, home, footer, brand] = await Promise.all([
             this.landModel.findOne().select(projection).lean(),
             seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
             home_model_1.HomeModel.findOne().select(testimonialsProjection).lean(),
             footer_model_1.FooterModel.findOne().select(footerProjection).lean(),
+            brand_model_1.default.findOne().lean(),
         ]);
         const landData = land?.[lang];
         if (!landData) {
@@ -187,6 +189,7 @@ class LandServices {
             },
             footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.land ?? null,
+            brand: brand ?? null,
         });
         return (0, format_services_1.default)(200, "Land fetched successfully", responseData);
     }

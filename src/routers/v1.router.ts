@@ -10,6 +10,7 @@ import eventRoutes from "../modules/routes/events/events.routes";
 import seoRoutes from "../modules/routes/seo/seo.routes";
 import footerRoutes from "../modules/routes/footer/footer.routes";
 import sitemapRoutes from "../modules/routes/sitemap/sitemap.routes";
+import brandRoutes from "../modules/routes/brand/brand.routes";
 
 const v1Router = Router();
 
@@ -24,5 +25,6 @@ v1Router.use("/events", eventRoutes);
 v1Router.use("/seo", seoRoutes);
 v1Router.use("/footer", footerRoutes);
 v1Router.use("/sitemap", sitemapRoutes);
+v1Router.use("/brand", brandRoutes);
 
 export default v1Router;

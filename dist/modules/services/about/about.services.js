@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const about_model_1 = require("../../models/about/about.model");
 const footer_model_1 = require("../../models/footer/footer.model");
 const seo_model_1 = require("../../models/seo/seo.model");
+const brand_model_1 = __importDefault(require("../../models/brand/brand.model"));
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
 class AboutServices {
@@ -71,10 +72,11 @@ class AboutServices {
             [lang]: 1,
             _id: 0,
         };
-        const [about, seo, footer] = await Promise.all([
+        const [about, seo, footer, brand] = await Promise.all([
             this.aboutModel.findOne().select(projection).lean(),
             seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
             footer_model_1.FooterModel.findOne().select(footerProjection).lean(),
+            brand_model_1.default.findOne().lean(),
         ]);
         const aboutData = about?.[lang];
         if (!aboutData) {
@@ -84,6 +86,7 @@ class AboutServices {
             ...aboutData,
             footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.about ?? null,
+            brand: brand ?? null,
         });
     }
     async getHero(lang) {

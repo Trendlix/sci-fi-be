@@ -401,23 +401,13 @@ const ServicesSchoolTripsAndNurseryBaseSchema = new mongoose_1.default.Schema({
         required: true,
         minlength: 10
     },
-    highlights: {
-        icon: {
-            type: String,
-            required: true,
-        },
-        line: {
-            title: {
-                type: String,
-                required: true,
-                minlength: 3,
-            },
-            description: {
-                type: String,
-                required: true,
-                minlength: 10
-            }
-        }
+    video: {
+        type: ServicesFileSchema,
+        required: false,
+    },
+    catelog: {
+        type: ServicesFileSchema,
+        required: false,
     }
 }, { _id: false, timestamps: true });
 const ServicesSchoolTripsAndNurserySchema = new mongoose_1.default.Schema({

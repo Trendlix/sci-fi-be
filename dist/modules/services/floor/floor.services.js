@@ -7,6 +7,7 @@ const floor_model_1 = require("../../models/floor/floor.model");
 const land_model_1 = require("../../models/land/land.model");
 const footer_model_1 = require("../../models/footer/footer.model");
 const seo_model_1 = require("../../models/seo/seo.model");
+const brand_model_1 = __importDefault(require("../../models/brand/brand.model"));
 const error_services_1 = require("../../../services/error.services");
 const format_services_1 = __importDefault(require("../../../services/format.services"));
 class FloorServices {
@@ -206,7 +207,7 @@ class FloorServices {
             [lang]: 1,
             _id: 0,
         };
-        let [floor, seo, footer] = await Promise.all([
+        let [floor, seo, footer, brand] = await Promise.all([
             (async () => {
                 if (floorId) {
                     return this.floorModel.findOne({ _id: floorId }).select(projection).lean();
@@ -237,6 +238,7 @@ class FloorServices {
             })(),
             seo_model_1.SeoModel.findOne().select(seoProjection).lean(),
             footer_model_1.FooterModel.findOne().select(footerProjection).lean(),
+            brand_model_1.default.findOne().lean(),
         ]);
         if (!floor || !floor?.[lang]) {
             if (floor && !floor?.[lang]) {
@@ -278,6 +280,7 @@ class FloorServices {
             ...floorData,
             footer: footer?.[lang] ?? null,
             seo: floorData.seo ?? seo?.[lang]?.land ?? null,
+            brand: brand ?? null,
         });
     }
     async getFloorSeo(lang, floorId, floorIndex, floorTitle) {

@@ -108,19 +108,10 @@ export interface IServiceMembershipPackages {
     };
 }
 
-export interface IServiceSchoolTripsAndNurseryHighlightLine {
-    title: string;
-    description: string;
-}
-
-export interface IServiceSchoolTripsAndNurseryHighlights {
-    icon: string;
-    line: IServiceSchoolTripsAndNurseryHighlightLine;
-}
-
 export interface IServiceSchoolTripsAndNurseryBase {
     description: string;
-    highlights: IServiceSchoolTripsAndNurseryHighlights;
+    video?: ILandFile;
+    catelog?: ILandFile;
 }
 
 export interface IServiceSchoolTripsAndNursery {

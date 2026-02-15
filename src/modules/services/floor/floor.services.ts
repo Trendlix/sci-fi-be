@@ -3,6 +3,8 @@ import { FloorModel, IFloorModel } from "../../models/floor/floor.model";
 import { LandModel } from "../../models/land/land.model";
 import { FooterModel } from "../../models/footer/footer.model";
 import { SeoModel } from "../../models/seo/seo.model";
+import BrandModel from "../../models/brand/brand.model";
+import { IBrand } from "../../models/brand/types/model.types";
 import { ISeo } from "../../models/seo/types/model.types";
 import { IFloor, IFloorFeatures, IFloorGrounds, IFloorHeader, IFloorHero, IFloorServices, IFloorSlider, IFloorSeo } from "../../models/floor/types/model.types";
 import type { ILand } from "../../models/land/types/model.types";
@@ -354,7 +356,7 @@ class FloorServices {
             [lang]: 1,
             _id: 0,
         };
-        let [floor, seo, footer] = await Promise.all([
+        let [floor, seo, footer, brand] = await Promise.all([
             (async () => {
                 if (floorId) {
                     return this.floorModel.findOne({ _id: floorId }).select(projection).lean<IFloor | null>();
@@ -384,6 +386,7 @@ class FloorServices {
             })(),
             SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
             FooterModel.findOne().select(footerProjection).lean(),
+            BrandModel.findOne().lean<IBrand | null>(),
         ]);
         if (!floor || !floor?.[lang]) {
             if (floor && !floor?.[lang]) {
@@ -430,6 +433,7 @@ class FloorServices {
             ...floorData,
             footer: footer?.[lang] ?? null,
             seo: floorData.seo ?? seo?.[lang]?.land ?? null,
+            brand: brand ?? null,
         });
     }
 

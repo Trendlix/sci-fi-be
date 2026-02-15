@@ -5,6 +5,8 @@ import { HomeModel } from "../../models/home/home.model";
 import { IHome } from "../../models/home/types/model.types";
 import { FooterModel } from "../../models/footer/footer.model";
 import { SeoModel } from "../../models/seo/seo.model";
+import BrandModel from "../../models/brand/brand.model";
+import { IBrand } from "../../models/brand/types/model.types";
 import { ISeo } from "../../models/seo/types/model.types";
 import { ServerError } from "../../../services/error.services";
 import responseFormatter from "../../../services/format.services";
@@ -32,11 +34,12 @@ class ContactServices {
             [lang]: 1,
             _id: 0,
         };
-        const [contact, home, seo, footer] = await Promise.all([
+        const [contact, home, seo, footer, brand] = await Promise.all([
             this.contactModel.findOne().select(lang).lean<IContact | null>(),
             HomeModel.findOne().select(`${lang}.locations`).lean<IHome | null>(),
             SeoModel.findOne().select(seoProjection).lean<ISeo | null>(),
             FooterModel.findOne().select(footerProjection).lean(),
+            BrandModel.findOne().lean<IBrand | null>(),
         ]);
         const contactBase = contact?.[lang];
         if (!contactBase) {
@@ -48,6 +51,7 @@ class ContactServices {
             locations,
             footer: footer?.[lang] ?? null,
             seo: seo?.[lang]?.contact ?? null,
+            brand: brand ?? null,
         });
     }
 
