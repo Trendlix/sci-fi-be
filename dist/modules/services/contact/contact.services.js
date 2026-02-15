@@ -53,8 +53,26 @@ class ContactServices {
         });
     }
     async patchContact(lang, contact) {
+        const normalizedCards = (contact.getInTouch?.cards ?? [])
+            .map((card) => ({
+            ...card,
+            lines: (card.lines ?? []).map((line) => line.trim()).filter(Boolean),
+        }))
+            .filter((card) => card.lines.length > 0);
+        const normalizedContact = {
+            ...contact,
+            hero: {
+                ...contact.hero,
+                description: contact.hero?.description?.trim?.() ?? contact.hero?.description,
+            },
+            getInTouch: {
+                ...contact.getInTouch,
+                description: contact.getInTouch?.description?.trim?.() ?? contact.getInTouch?.description,
+                cards: normalizedCards,
+            },
+        };
         const updatedContact = await this.contactModel
-            .findOneAndUpdate({}, { $set: { [lang]: contact } }, { new: true, runValidators: true, upsert: true, setDefaultsOnInsert: false })
+            .findOneAndUpdate({}, { $set: { [lang]: normalizedContact } }, { new: true, runValidators: true, upsert: true, setDefaultsOnInsert: false })
             .select(lang)
             .lean();
         const updatedContactBase = updatedContact?.[lang];
