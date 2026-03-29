@@ -41,9 +41,13 @@ const fileSchema = z.object({
     contentType: z.string().optional(),
     uploadedAt: z.string().optional(),
 });
-exports.studioHeroSchema = z.object({
-    title: z.array(z.string().min(1)).min(3),
+const studioHeroCardSchema = z.object({
+    title: z.array(z.string().min(1)).length(8),
     description: z.string().min(10),
+    file: fileSchema.optional(),
+});
+exports.studioHeroSchema = z.object({
+    cards: z.array(studioHeroCardSchema).min(1),
 });
 const aboutCardSchema = z.object({
     tag: z.string().min(1),

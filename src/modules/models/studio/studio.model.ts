@@ -1,19 +1,45 @@
 import mongoose, { Document } from "mongoose";
 import { IStudio } from "./types/model.types";
 
-const HeroSchema = new mongoose.Schema({
+const HeroCardSchema = new mongoose.Schema({
     title: {
         type: mongoose.Schema.Types.Array,
         required: true,
         validate: {
-            validator: (v: string[]) => v.length >=3,
-            message: "Title must have at least 3 words."
+            validator: (v: string[]) => v.length === 8,
+            message: "Title must have exactly 8 words."
         }
     },
     description: {
         type: String,
         required: true,
         minlength: 10
+    },
+    file: {
+        url: {
+            type: String,
+            required: false
+        },
+        path: {
+            type: String,
+            required: false
+        },
+        contentType: String,
+        uploadedAt: {
+            type: Date,
+            default: Date.now
+        }
+    }
+}, { _id: false, timestamps: true });
+
+const HeroSchema = new mongoose.Schema({
+    cards: {
+        type: [HeroCardSchema],
+        required: true,
+        validate: {
+            validator: (cards: unknown[]) => cards.length > 0,
+            message: "at least one card required."
+        }
     }
 }, { _id: false, timestamps: true });
 

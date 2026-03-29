@@ -5,9 +5,14 @@ export type IStudioFile = {
     uploadedAt?: string;
 };
 
-export interface IStudioHero {
+export interface IStudioHeroCard {
     title: string[];
     description: string;
+    file?: IStudioFile;
+}
+
+export interface IStudioHero {
+    cards: IStudioHeroCard[];
 }
 
 export interface IStudioAboutCard {
