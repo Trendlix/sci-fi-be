@@ -8,7 +8,7 @@ const fileSchema = z.object({
 });
 
 const studioHeroCardSchema = z.object({
-    title: z.array(z.string().min(1)).length(8),
+    title: z.array(z.string().min(1)).min(2),
     description: z.string().min(10),
     file: fileSchema.optional(),
 });
