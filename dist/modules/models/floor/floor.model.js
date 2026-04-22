@@ -123,6 +123,10 @@ const ServicesSchema = new mongoose_1.default.Schema({
                     required: true,
                     minlength: 3,
                 },
+                description: {
+                    type: String,
+                    default: "",
+                },
                 thumbnail: {
                     url: {
                         type: String,

@@ -31,6 +31,7 @@ export const floorFeaturesSchema = z.object({
 
 const servicesCardSchema = z.object({
     title: z.string().min(3),
+    description: z.union([z.string().min(1), z.literal("")]).optional(),
     thumbnail: fileSchema,
     files: z.array(fileSchema).min(1).optional(),
 });

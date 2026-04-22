@@ -29,6 +29,7 @@ export interface IFloorFeatures {
 
 export interface IFloorServiceCard {
     title: string;
+    description?: string;
     thumbnail: IFloorFile;
     files: IFloorFile[];
 }
